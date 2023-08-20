@@ -68,15 +68,7 @@ class ImageController extends Controller
         return response()->json(['message' => '画像が正常に削除されました。']);
     }
 
-    
-    public function images() {
-        $categories = Category::all();
-        $images = Image::with('categories')->orderBy('download_count', 'desc')->get();
-
-        return view('admin.image_form', compact('categories', 'images'));
-    }
-
-    public function loadMoreImages(Request $request){
+        public function loadMoreImages(Request $request){
         $limit = $request->get('limit', 20);
         $offset = $request->get('offset', 0);
 

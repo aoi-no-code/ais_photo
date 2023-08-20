@@ -7,7 +7,7 @@
         <!-- コンテナ開始：中央に配置するためのスタイルが適用されています -->
         <div class="container">
             <!-- ブランドロゴ: サイトのホームへのリンク -->
-            <a class="navbar-brand" href="{{ url('/') }}">AI's photo</a>
+            <a class="navbar-brand" href="{{ route('home') }}">AI's photo</a>
             
         </div>
     </nav> <!-- ナビゲーションバー終了 -->

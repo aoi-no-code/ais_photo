@@ -3,6 +3,8 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ImageController;
+use App\Models\Image;
+
 
 
 
@@ -20,7 +22,13 @@ use App\Http\Controllers\ImageController;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    // ユーザーがログインしているか確認
+    if (Auth::check()) {
+        return redirect()->route('home'); // あなたが定義したユーザートップページへの名前付きルート
+    }
+    $images = Image::orderBy('download_count', 'desc')->take(7)->get();
+        
+    return view('auth.login', compact('images'));
 });
 
 Route::get('/logout', [App\Http\Controllers\Auth\LoginController::class, 'logout'])->name('logout');
@@ -57,6 +65,12 @@ Auth::routes();
 
 Route::get('/home/{categoryName?}', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 Route::get('/home/loadImage', [App\Http\Controllers\HomeController::class, 'getImagesByCategory']);
+
+Route::get('/contact', [App\Http\Controllers\HomeController::class, 'contact'])->name('contact');
+Route::post('/submitContact', [App\Http\Controllers\HomeController::class, 'submitContact'])->name('submitContact');
+
+Route::get('/terms', [App\Http\Controllers\HomeController::class, 'terms'])->name('terms');
+
 
 Route::get('/fetch-images', [App\Http\Controllers\HomeController::class, 'fetchImages']);
 

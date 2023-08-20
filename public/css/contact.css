@@ -1,0 +1,78 @@
+label{
+    font-family: 'Baskerville', serif;
+    font-weight: bold;
+    font-size: 10px;
+    letter-spacing: 1px;
+    color: black;
+    text-align: right; /* 右寄せにする */
+    margin-right: 10px; /* ラベルと入力フィールドの間にスペースを開ける */
+    display: inline-block; /* インライン要素をブロック要素のように扱う */
+    width: 150px; /* ラベルの幅を指定 */
+    text-align: left; /* ラベルを左寄せにする */
+    vertical-align: top; /* ラベルを上部に揃える */
+
+}
+
+/* 全体のスタイル */
+.contact-container {
+    padding-top: 120px;
+    width: 80%; /* これは調整可能。フォームの幅を指定したい値に変更できます */
+    margin: 0 auto; /* これにより全体が中央に配置されます */
+    font-family: Arial, sans-serif; /* 使用するフォントを変更する場合、これを変更してください */
+}
+
+.contact-title {
+    text-align: center; /* タイトルを中央に配置 */
+    font-family: 'Baskerville', serif;
+    font-size: 20px;
+    margin-bottom: 30px;
+}
+
+/* フォームの要素のスタイル */
+form div {
+    margin-bottom: 15px; /* 各入力エリアの間隔を指定 */
+}
+
+label {
+    display: inline-block; /* インライン要素をブロック要素のように扱う */
+    width: 300px; /* ラベルの幅を指定 */
+    text-align: left; /* ラベルを左寄せにする */
+    vertical-align: top; /* ラベルを上部に揃える */
+}
+
+input[type="text"],
+input[type="email"],
+input[type="tel"],
+input[type="url"],
+input[type="file"] {
+    width: 100%; /* これも調整可能。入力エリアの幅を指定したい値に変更できます */
+    padding: 5px; /* 入力エリアの内側のスペースを指定 */
+    border: 1px solid #ccc; /* 入力エリアの境界線の色を指定 */
+    border-radius: 4px; /* 入力エリアの角を少し丸くする */
+    background-color: #e1e1e1;
+    font-family: 'Baskerville', serif;
+
+    
+}
+
+button {
+    display: block; /* ボタンをブロック要素として表示 */
+    margin: 0 auto; /* ボタンを中央に配置 */
+    padding: 10px 15px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer; /* マウスカーソルをハンドポインタにする */
+    transition: background-color 0.3s; /* 背景色の変更のアニメーションをスムーズにする */
+}
+
+button:hover {
+    background-color: #0056b3; /* ボタンにマウスを乗せたときの背景色 */
+}
+
+
+
+
+
+

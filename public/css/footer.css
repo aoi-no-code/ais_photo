@@ -3,13 +3,12 @@
     display: flex;
     justify-content: flex-start;
     align-items: center;
-    background-color: #ffffff;
+    background-color: #ffffff00;
     height: 150px;
     width: 100%;
     padding-left: 50px;
-    
     position: sticky;
-    bottom: 0;
+    margin-bottom: 50px;
 }
 /* ナビゲーションリスト */
 footer ul {
@@ -22,12 +21,13 @@ footer ul {
 }
 
 /* ナビゲーション項目 */
-footer li {
+footer a {
     font-size: 10px;
     line-height: 30px;
     color: #000000;
     cursor: pointer;
     transition: color 0.2s;
+    text-decoration: none;
 }
 
 footer li:hover {

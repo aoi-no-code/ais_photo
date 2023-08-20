@@ -17,27 +17,31 @@
 
         <div class="image-container">
             @foreach($images as $image)
-                <div class="image-wrapper" data-category="{{ $image->categories->pluck('name')->implode(',') }}">
-                    <a href="{{ route('image.download', $image->filename) }}">
-                        <img src="{{ Storage::disk('s3')->url('images/' . $image->filename) }}" alt="Image" class="image">
-                    </a>
-                    <span class="download-count">
-                        <i class="bi bi-download"></i> <!-- Bootstrap Iconsのダウンロードアイコン -->
-                        {{ $image->download_count }}
-                    </span>
-                </div>   
-
-            @endforeach
-            
-            <div class="image-wrapper dummy"></div> <!-- ダミーの .image-wrapperを追加 -->
-
-            
+            <div class="image-wrapper" 
+                    data-filename="{{ $image->filename }}" 
+                    data-downloadcount="{{ $image->download_count }}"
+                    data-createdat="{{ $image->created_at }}"
+                    data-category="{{ $image->categories->pluck('name')->implode(',') }}">
+                <a href="{{ route('image.download', $image->filename) }}">
+                    <img src="{{ Storage::disk('s3')->url('images/' . $image->filename) }}" alt="Image" class="image">
+                </a>
+                <span class="download-count">
+                    <i class="bi bi-download"></i> 
+                    {{ $image->download_count }}
+                </span>
+            </div>   
+        @endforeach
+                    
             <div class="fullscreen-modal" id="fullscreenModal">
                 <img src="" id="fullscreenImage">
             </div>
         </div>
         
-        <div class="filter-modal" id="filterModal">        
+        <div class="filter-modal" id="filterModal">
+            
+            {{-- <button id="sortByDate">新着順</button>
+            <button id="sortByDownloads">ダウンロード数順</button> --}}
+            
             @foreach($sortedStyles as $sortedStyle)
                 <h2 class="category-title">{{ $sortedStyle->name }}</h2>
                 <div>
@@ -58,8 +62,14 @@
             <button id="closeFilterModal">exit</button>
         </div>
         
-        <div id="loadingIndicator" style="display: none;">Loading...</div>
-        <div id="endMessage" style="display: none;">以上です</div>
+<div class="notification-container">
+    <div id="loadingIndicator" class="notification-message" style="display: none;">Loading...</div>
+    <div id="endMessage" class="notification-message" style="display: none;">
+        只今順次作成中です<br>少々お待ちください
+    </div>
+</div>
+
+
 @endsection
 
 <script>
@@ -70,20 +80,41 @@ document.addEventListener('DOMContentLoaded', function() {
         const container = document.querySelector('.image-container');
         const images = container.querySelectorAll('img');
 
-        // 現在のダミー要素を削除
-        const dummyWrapper = container.querySelector('.image-wrapper.dummy');
-        if (dummyWrapper) {
-            dummyWrapper.remove();
-        }
-
-        // 画像の数が奇数か確認
-        if (images.length % 2 !== 0) {
-            // 空のimage-wrapperを追加
-            const newDummyWrapper = document.createElement('div');
-            newDummyWrapper.classList.add('image-wrapper', 'dummy');
-            container.appendChild(newDummyWrapper);
-        }
     }
+
+
+
+
+
+    // document.getElementById('sortByDate').addEventListener('click', function() {
+    //     images.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+    //     displayImages(images);
+    // });
+
+    // document.getElementById('sortByDownloads').addEventListener('click', function() {
+    //     images.sort((a, b) => b.downloads - a.downloads);
+    //     displayImages(images);
+    // });
+
+    // function displayImages(imageArray) {
+    // const container = document.getElementById('imageContainer');
+    // container.innerHTML = '';
+
+    // imageArray.forEach(image => {
+    //     const imgElem = document.createElement('img');
+    //     imgElem.src = image.url;
+    //     container.appendChild(imgElem);
+    // });
+    // }
+
+
+
+
+
+
+
+
+
 
     let isLoading = false;  // ロード中かどうかを示すフラグ
     let noMoreImages = false;  // これ以上ロードする画像がないかどうかを示すフラグ
@@ -172,7 +203,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 } else {
                     $("#endMessage").show();
                     noMoreImages = true;  // これ以上ロードする画像がない場合はフラグをtrueに設定 
-                    checkAndAddWrapper();  // この行を追加           
                 }
             },
             complete: function() {
@@ -218,7 +248,6 @@ document.addEventListener('DOMContentLoaded', function() {
             document.getElementById('noMatchMessage').style.display = 'block';
         } else {
             document.getElementById('noMatchMessage').style.display = 'none';
-            checkAndAddWrapper();
         }
     }
     
