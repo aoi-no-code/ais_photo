@@ -1,0 +1,15 @@
+.main {
+    margin-top: 80px;
+}
+.admin-sidebar {
+    width: 200px;
+    height: 100vh;
+    float: left;
+    background-color: #f5f5f5;
+    padding: 20px;
+}
+
+.admin-content {
+    margin-left: 220px;
+    padding: 20px;
+}
