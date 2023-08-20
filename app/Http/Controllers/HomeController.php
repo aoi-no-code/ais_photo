@@ -26,6 +26,7 @@ class HomeController extends Controller
     public function index(Request $request, $categoryName = null)
     {
         $categories = Category::all();
+        
     
         $order = ['gender', 'length', 'color', 'age'];
     
