@@ -21,7 +21,7 @@ class ImageController extends Controller
         // 複数画像のアップロード処理
         if ($request->hasFile('images')) {
             foreach ($request->file('images') as $imageFile) {
-                $hash = hash_file('sha256', $imageFile->getPath());
+                $hash = hash_file('sha256', $imageFile->getRealPath());
                 $filename = $hash . '.' . $imageFile->getClientOriginalExtension();
     
                 // 既に同じハッシュの画像が存在するかを確認
