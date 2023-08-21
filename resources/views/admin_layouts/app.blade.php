@@ -47,7 +47,6 @@
     <div class="container">
         <div class="admin-sidebar">
             <ul>
-                <a href="{{route('style')}}">aaaa</a>
 
                 <li><a href="#" data-content="image" class="sidebar-link">画像管理</a></li>
                 <li><a href="#" data-content="category" class="sidebar-link">カテゴリー追加</a></li>

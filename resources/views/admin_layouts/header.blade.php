@@ -41,7 +41,7 @@
                     <!-- 認証済みのユーザーの場合のメニュー項目 -->
                     @else
                         <!-- ドロップダウンメニュー：ユーザー名で表示 -->
-                        <li class="nav-item dropdown">
+                        {{-- <li class="nav-item dropdown">
                             <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
                                 {{ Auth::user()->name }}
                             </a>
@@ -60,7 +60,7 @@
                                     @csrf
                                 </form>
                             </div> <!-- ドロップダウンの内容終了 -->
-                        </li>
+                        </li> --}}
                     @endguest
 
                 </ul> <!-- 右側のナビゲーションメニュー終了 -->
