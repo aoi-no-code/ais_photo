@@ -17,24 +17,30 @@ class ImageController extends Controller
         $request->validate([
             'images.*' => 'required|mimes:jpg,jpeg,png|max:2048', // 2MBまで
         ]);
-
+    
         // 複数画像のアップロード処理
         if ($request->hasFile('images')) {
             foreach ($request->file('images') as $imageFile) {
+                $hash = hash_file('sha256', $imageFile->getPath());
+                $filename = $hash . '.' . $imageFile->getClientOriginalExtension();
+    
+                // 既に同じハッシュの画像が存在するかを確認
+                if (Image::where('filename', $filename)->exists()) {
+                    // エラーメッセージを返すか、このファイルをスキップして次の画像へ
+                    return redirect()->route('admin.top')->with('error', '同じ内容の画像が既に存在します: ' . $imageFile->getClientOriginalName());
+                }
+    
                 // 画像をS3にアップロード
-                $path = $imageFile->store('images', 's3');
-
-                // S3のパスからファイル名のみを取得
-                $filename = basename($path);
-
+                Storage::disk('s3')->putFileAs('images', $imageFile, $filename, 'public');
+    
                 // 画像をDBに保存
                 Image::create(['filename' => $filename]);
             }
         }
-
+    
         return redirect()->route('admin.top')->with('success', '画像がアップロードされました！');
     }
-
+    
     public function downloadImage($filename) {
         // イメージを検索
         $image = Image::where('filename', $filename)->firstOrFail();
