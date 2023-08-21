@@ -3,7 +3,6 @@
 namespace App\Http;
 
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
-use Closure;
 
 class Kernel extends HttpKernel
 {
@@ -67,13 +66,4 @@ class Kernel extends HttpKernel
         'admin' => \App\Http\Middleware\AdminMiddleware::class,
 
     ];
-
-    public function handle($request)
-    {
-        if (!$request->secure() && env('APP_ENV') === 'production') {
-            return redirect()->secure($request->getRequestUri());
-        }
-        return parent::handle($request);
-    }
-
 }
