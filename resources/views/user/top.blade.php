@@ -3,7 +3,7 @@
 <link href="{{ asset('css/main.css') }}" rel="stylesheet">
 
 @section('content')
-    <div class="main">
+    <div class="main body-no-scroll">
 
         <div class="filter-dropdown">
             <a href="#" class="filter-text" role="button" id="categoryDropdown">
@@ -309,10 +309,14 @@ document.addEventListener('DOMContentLoaded', function() {
     filterButton.addEventListener('click', function(e) {
         e.preventDefault();
         filterModal.classList.add('show');
+        // bodyにクラスを追加してスクロールを無効にする
+        document.body.classList.add('body-no-scroll');
     });
 
     closeModalButton.addEventListener('click', function() {
         filterModal.classList.remove('show');
+        // bodyのクラスを削除してスクロールを有効にする
+        document.body.classList.remove('body-no-scroll');
     });
 
     // カテゴリ項目をクリックした際のフィルタリング処理

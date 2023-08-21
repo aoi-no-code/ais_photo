@@ -1,3 +1,8 @@
+.body-no-scroll {
+    overflow: hidden;
+}
+
+
 /* Filter Dropdown and related styles */
 .filter-dropdown {
     margin: 100px auto 30px;
@@ -40,6 +45,8 @@
         transform: translateY(0);
     }
 }
+
+
 
 .image-container {
     padding-top: 40px;
