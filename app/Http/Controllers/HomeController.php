@@ -26,9 +26,9 @@ class HomeController extends Controller
     public function index(Request $request, $categoryName = null)
     {
         $categories = Category::all();
-        
+
     
-        $order = ['gender', 'length', 'color', 'age'];
+        $order = ['Gender', 'Length', 'Color', 'Background wall', 'Angle', 'Age'];
     
         $sortedStyles = Style::all()->sortBy(function ($style) use ($order) {
             return array_search($style->name, $order) !== false ? array_search($style->name, $order) : count($order);
