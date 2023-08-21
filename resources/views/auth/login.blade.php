@@ -5,9 +5,9 @@
 @section('content')
     <div class="container-center">
         <div class="bg-container">
-            @foreach($images as $index => $image)
+            {{-- @foreach($images as $index => $image)
                 <img src="{{ Storage::disk('s3')->url('images/' . $image->filename) }}" alt="Image" class="bg-image bg-image-{{ $index + 1 }}"> 
-            @endforeach
+            @endforeach --}}
         </div>
 
         <div class="description">
