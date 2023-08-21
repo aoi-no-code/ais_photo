@@ -116,6 +116,25 @@
     object-fit: contain; /* 全体が表示されるように */
 }
 
+.spinner {
+    border: 5px solid #f3f3f3;  /* 細くし、背景を白色に設定 */
+    border-top: 5px solid #b7b7b7;  /* 上部を黒色に設定 */
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    animation: spin 1s linear infinite;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+@keyframes spin {
+    0% { transform: translate(-50%, -50%) rotate(0deg); }
+    100% { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+
 .filter-modal {
     /* display: none; */
     position: fixed;

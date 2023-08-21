@@ -17,24 +17,26 @@
 
         <div class="image-container">
             @foreach($images as $image)
-            <div class="image-wrapper" 
-                    data-filename="{{ $image->filename }}" 
-                    data-downloadcount="{{ $image->download_count }}"
-                    data-createdat="{{ $image->created_at }}"
-                    data-category="{{ $image->categories->pluck('name')->implode(',') }}">
-                <a href="{{ route('image.download', $image->filename) }}">
-                    <img src="{{ Storage::disk('s3')->url('images/' . $image->filename) }}" alt="Image" class="image">
-                </a>
-                <span class="download-count">
-                    <i class="bi bi-download"></i> 
-                    {{ $image->download_count }}
-                </span>
-            </div>   
-        @endforeach
+                <div class="image-wrapper" 
+                        data-filename="{{ $image->filename }}" 
+                        data-downloadcount="{{ $image->download_count }}"
+                        data-createdat="{{ $image->created_at }}"
+                        data-category="{{ $image->categories->pluck('name')->implode(',') }}">
+                    <a href="{{ route('image.download', $image->filename) }}">
+                        <img src="{{ Storage::disk('s3')->url('images/' . $image->filename) }}" alt="Image" class="image">
+                    </a>
+                    <span class="download-count">
+                        <i class="bi bi-download"></i> 
+                        {{ $image->download_count }}
+                    </span>
+                </div>   
+            @endforeach
                     
             <div class="fullscreen-modal" id="fullscreenModal">
-                <img src="" id="fullscreenImage">
+                <div class="spinner" id="loadingSpinner"></div>
+                <img src="" id="fullscreenImage" style="display: none;">
             </div>
+
         </div>
         
         <div class="filter-modal" id="filterModal">
@@ -221,12 +223,16 @@ document.addEventListener('DOMContentLoaded', function() {
         const images = document.querySelectorAll('.image-wrapper');
         let matchFound = false; // マッチする画像が見つかったかどうかのフラグ
 
+        const notificationContainer = document.querySelector('.notification-container');
+        const noMatchMessage = document.getElementById('noMatchMessage');
+
         // カテゴリが選択されていない場合の処理
         if (selectedCategories.length === 0) {
             images.forEach(img => {
                 img.style.display = 'block'; // すべての画像を表示
             });
-            document.getElementById('noMatchMessage').style.display = 'none';
+            noMatchMessage.style.display = 'none';
+            notificationContainer.style.display = 'block'; // 再度表示する
             return;
         }
 
@@ -235,7 +241,7 @@ document.addEventListener('DOMContentLoaded', function() {
             const dataCategory = img.getAttribute('data-category');
             const imgCategories = dataCategory ? dataCategory.split(',') : [];
 
-                if (selectedCategories.every(cat => imgCategories.includes(cat))) {
+            if (selectedCategories.every(cat => imgCategories.includes(cat))) {
                 img.style.display = 'block';
                 matchFound = true;
             } else {
@@ -245,18 +251,51 @@ document.addEventListener('DOMContentLoaded', function() {
 
         // マッチする画像が一つもない場合の処理
         if (!matchFound) {
-            document.getElementById('noMatchMessage').style.display = 'block';
+            noMatchMessage.style.display = 'block';
+            notificationContainer.style.display = 'none'; // ここで再度表示する必要があるか確認してください。
         } else {
-            document.getElementById('noMatchMessage').style.display = 'none';
+            noMatchMessage.style.display = 'none';
+            notificationContainer.style.display = 'block'; // 他の条件下で再表示するためのロジック
         }
     }
     
 
     // モバイルデバイスで画像をクリックした時のモーダル表示処理
     if (isMobile) {
+        let isDownloading = false;  // 画像のダウンロード中かどうかを追跡
+
+        const modal = document.getElementById('fullscreenModal');
+        const fullscreenImage = document.getElementById('fullscreenImage');
+        const spinner = document.getElementById('loadingSpinner');
+
+        // モーダルクリックでの閉じる処理をここで一度だけ設定
+        modal.addEventListener('click', function() {
+            if (!isDownloading) {
+                this.style.display = 'none';
+                document.body.classList.remove('body-no-scroll');
+
+                // スピナーと画像の表示状態をリセット
+                spinner.style.display = 'none';
+                fullscreenImage.style.display = 'none';
+            }
+        });
+
         images.forEach(img => {
             img.parentElement.addEventListener('click', function(e) {
                 e.preventDefault();
+
+                // 既にダウンロード中なら何もしない
+                if (isDownloading) {
+                    return;
+                }
+
+                isDownloading = true;
+
+                modal.style.display = 'flex';
+                document.body.classList.add('body-no-scroll');
+
+                spinner.style.display = 'block';  // スピナーを表示
+                fullscreenImage.style.display = 'none';  // 画像は非表示に設定
 
                 // 画像情報を取得
                 fetch(this.href, {
@@ -267,17 +306,19 @@ document.addEventListener('DOMContentLoaded', function() {
                 })
                 .then(response => {
                     if(response.ok) {
-                        const modal = document.getElementById('fullscreenModal');
-                        const fullscreenImage = document.getElementById('fullscreenImage');
+
+                        // 画像が読み込まれたらスピナーを非表示にして、画像を表示
+                        fullscreenImage.onload = function() {
+                            spinner.style.display = 'none';
+                            fullscreenImage.style.display = 'block';
+                            isDownloading = false;  // ダウンロードが終了したのでフラグを更新
+                        }
+
+                        // 初期のステートとしてスピナーを表示し、画像を非表示にします。
+                        spinner.style.display = 'block';
+                        fullscreenImage.style.display = 'none';
+
                         fullscreenImage.src = img.src;
-                        modal.style.display = 'flex';
-                        document.body.classList.add('body-no-scroll');
-                    
-                        
-                        modal.addEventListener('click', function() {
-                            this.style.display = 'none';
-                            document.body.classList.remove('body-no-scroll');
-                        });
                     }
                 });
             });
