@@ -271,9 +271,12 @@ document.addEventListener('DOMContentLoaded', function() {
                         const fullscreenImage = document.getElementById('fullscreenImage');
                         fullscreenImage.src = img.src;
                         modal.style.display = 'flex';
+                        document.body.classList.add('body-no-scroll');
+                    
                         
                         modal.addEventListener('click', function() {
                             this.style.display = 'none';
+                            document.body.classList.remove('body-no-scroll');
                         });
                     }
                 });
