@@ -15,7 +15,7 @@ class ImageController extends Controller
     {
         // 複数画像のバリデーション
         $request->validate([
-            'images.*' => 'required|mimes:jpg,jpeg,png|max:2048', // 2MBまで
+            'images.*' => 'required|mimes:jpg,jpeg,png|min:1024|max:2048',
         ]);
     
         // 複数画像のアップロード処理
