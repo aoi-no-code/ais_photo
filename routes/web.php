@@ -18,8 +18,6 @@ Route::get('/', function () {
 
 Route::get('/logout', [App\Http\Controllers\Auth\LoginController::class, 'logout'])->name('logout');
 
-
-
 Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('/admin', [App\Http\Controllers\AdminController::class, 'index'])->name('admin.top');
     Route::get('/admin/get-content/{content}', [App\Http\Controllers\AdminController::class, 'getContent']);
@@ -41,6 +39,13 @@ Route::middleware(['auth', 'admin'])->group(function () {
 
     Route::post('/upload', [App\Http\Controllers\ImageController::class, 'upload'])->name('upload.image');
     Route::delete('/image/delete/{image}', [App\Http\Controllers\ImageController::class, 'destroyAPI'])->name('api.images.destroy');
+
+    Route::post('/user/store', [App\Http\Controllers\UserController::class, 'store'])->name('user.store');
+    Route::put('/user/edit/{userId}', [App\Http\Controllers\UserController::class, 'edit'])->name('user.edit');
+
+    Route::delete('/user/delete/{userId}', [App\Http\Controllers\UserController::class, 'destroy'])->name('user.destroy');
+
+    Route::put('/users/{userId}/update-ban-info', [App\Http\Controllers\UserController::class, 'updateBanInfo'])->name('user.updateBanInfo');
 
     
 });
@@ -64,9 +69,4 @@ Route::get('/fetch-images', [App\Http\Controllers\HomeController::class, 'fetchI
 Route::get('/image/{filename}', [App\Http\Controllers\ImageController::class, 'downloadImage'])->name('image.download');
 
 Route::get('/load-more-images', [App\Http\Controllers\ImageController::class, 'loadMoreImages']);
-
-
-
-
-
 

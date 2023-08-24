@@ -4,7 +4,7 @@
         @csrf
         <div class="form-group">
             <label for="category-name">カテゴリー名:</label>
-            <input type="text" name="name" id="category-name" required>
+            <input type="text" name="name" id="category-name" autocomplete="off" required>
         </div>
         <button type="submit" class="btn btn-primary">カテゴリー追加</button>
     </form>

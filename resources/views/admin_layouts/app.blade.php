@@ -1,4 +1,4 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 
 <head>
@@ -48,6 +48,7 @@
         <div class="admin-sidebar">
             <ul>
 
+                <li><a href="#" data-content="user" class="sidebar-link">ユーザー管理</a></li>
                 <li><a href="#" data-content="image" class="sidebar-link">画像管理</a></li>
                 <li><a href="#" data-content="category" class="sidebar-link">カテゴリー追加</a></li>
                 <li><a href="#" data-content="style" class="sidebar-link">カテ別けスタイル追加</a></li>

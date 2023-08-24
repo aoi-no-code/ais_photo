@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Models\Category;
 use App\Models\Image;
 use App\Models\Style;
+use App\Models\User;
+
 use Illuminate\Support\Facades\Storage;
 
 
@@ -33,6 +35,10 @@ class AdminController extends Controller
 
     public function getContent($content) {
         switch ($content) {
+            case 'user':
+                $users = User::all();
+                return view('admin.user', compact('users'));
+
             case 'image':
                 $categories = Category::all();
                 $images = Image::with('categories')->orderBy('created_at', 'desc')->get();
