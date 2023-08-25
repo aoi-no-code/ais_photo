@@ -6,7 +6,7 @@
     <div class="main body-no-scroll">
 
         <div class="totalCount" >
-            <p class="total-text">画像の枚数：{{ $totalImagesCount }}枚</p>
+            <p class="total-text">現在の全掲載枚数：{{ $totalImagesCount }}枚</p>
         </div>
 
 
