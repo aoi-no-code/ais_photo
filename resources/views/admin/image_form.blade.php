@@ -68,6 +68,7 @@
                     @endforeach
                 </tbody>
             </table>
+            {{ $images->links() }}
         </form>
     </div>
     <!-- モーダルの構造 -->

@@ -41,7 +41,7 @@ class AdminController extends Controller
 
             case 'image':
                 $categories = Category::orderBy('style_id', 'asc')->get();  // 'asc'は昇順、'desc'は降順
-                $images = Image::with('categories')->orderBy('created_at', 'desc')->get();
+                $images = Image::with('categories')->orderBy('created_at', 'desc')->paginate(30);
                 return view('admin.image_form', compact('categories', 'images'));
             
             case 'category':
