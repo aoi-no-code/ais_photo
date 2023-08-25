@@ -21,7 +21,6 @@
 
 <div id="upload" class="tab">
     <div style="display: flex">
-        <h2>画像アップロード</h2>
         <form action="{{ route('upload.image') }}" method="post" enctype="multipart/form-data" style="display: flex">
             @csrf
             <div class="form-group">
@@ -32,7 +31,6 @@
         </form>
     </div>
 
-    <h2>画像の一覧とカテゴリ編集</h2>
     <button id="editButton">編集</button>
     <div class="table-wrapper">
         <form action="{{ route('images.updateAllCategories') }}" method="post">
