@@ -131,13 +131,6 @@ document.addEventListener('DOMContentLoaded', function() {
                             const imgElement = imageElement.querySelector('img');
                             imgElement.parentElement.addEventListener('click', function(e) {
                                 e.preventDefault();
-                                
-                                // スピナー表示処理を追加 (例)
-                                const spinner = document.createElement('div');
-                                spinner.className = 'spinner';
-                                spinner.innerHTML = 'Loading...';
-                                imgElement.parentElement.appendChild(spinner);
-
                                 fetch(this.href, {
                                     method: 'GET',
                                     headers: {
@@ -146,11 +139,6 @@ document.addEventListener('DOMContentLoaded', function() {
                                 })
                                 .then(response => {
                                     if(response.ok) {
-                                        // スピナー削除処理を追加 (例)
-                                        if (spinner) {
-                                            spinner.remove();
-                                        }
-
                                         const modal = document.getElementById('fullscreenModal');
                                         const fullscreenImage = document.getElementById('fullscreenImage');
                                         fullscreenImage.src = imgElement.src;
@@ -162,8 +150,7 @@ document.addEventListener('DOMContentLoaded', function() {
                                     }
                                 });
                             });
-                        }         
-                                       
+                        }
                         console.log("loadMoreImages called");
 
                         // ダウンロード数の表示のための要素を作成
