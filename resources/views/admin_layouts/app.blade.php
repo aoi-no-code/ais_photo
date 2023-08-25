@@ -134,6 +134,12 @@
             // 初回読み込み時にもsetEditButtonListenerを呼び出す
             setEditButtonListener();
         });
+
+        function showImage(src) {
+            document.getElementById('modalImage').src = src;
+            $('#imageModal').modal('show');
+        }
+
     </script>
             
     </body>

@@ -27,7 +27,7 @@
             <tbody>
                 @foreach($images as $image)
                     <tr>
-                        <td><img src="{{ Storage::disk('s3')->url('images/' . $image->filename) }}" alt="画像" style="aspect-ratio:4 / 5; object-fit: cover; height: 50px; width: auto;"></td>
+                        <td><img src="{{ Storage::disk('s3')->url('images/' . $image->filename) }}" alt="画像" onclick="showImage(this.src)" style="aspect-ratio:4 / 5; object-fit: cover; height: 50px; width: auto;"></td>
                         @foreach($categories as $category)
                             <td class="checkboxContainer">
                                 <input type="checkbox" name="category_image[{{ $image->id }}][categories][]" value="{{ $category->id }}" {{ $image->categories->contains($category->id) ? 'checked' : '' }} style="display: none;">
@@ -47,5 +47,14 @@
         </table>
         <button type="submit" style="display: none;" class="saveButton">一括更新</button>
     </form>
+    <!-- モーダルの構造 -->
+    <div class="modal fade" id="imageModal" tabindex="-1">
+        <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+            <img id="modalImage" src="" alt="画像" style="width:100%;">
+            </div>
+        </div>
+        </div>
+    </div>
 </div>
-    
