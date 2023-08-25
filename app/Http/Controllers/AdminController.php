@@ -40,11 +40,11 @@ class AdminController extends Controller
                 return view('admin.user', compact('users'));
 
             case 'image':
-                $categories = Category::all();
+                $categories = Category::orderBy('style_id', 'asc')->get();  // 'asc'は昇順、'desc'は降順
                 $images = Image::with('categories')->orderBy('created_at', 'desc')->get();
                 return view('admin.image_form', compact('categories', 'images'));
             case 'category':
-                $categories = Category::all();
+                $categories = Category::orderBy('style_id', 'asc')->get();  // 'asc'は昇順、'desc'は降順
                 $styles = Style::all();
 
                 return view('admin.category_form', compact('categories', 'styles'))->render();
