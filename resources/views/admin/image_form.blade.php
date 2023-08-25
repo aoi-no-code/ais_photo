@@ -37,7 +37,6 @@
     <div class="table-wrapper">
         <form action="{{ route('images.updateAllCategories') }}" method="post">
             <button type="submit" style="display: none;" class="saveButton">一括更新</button>
-
             @csrf
             @method('PUT')
             <table class="table table-bordered">
@@ -45,7 +44,7 @@
                     <tr>
                         <th>画像</th>
                         @foreach($categories as $category)
-                            <th>{{ $category->name }}</th>
+                            <th style="font-size: 3px">{{ $category->name }}</th>
                         @endforeach
                         <th>操作</th> <!-- 新しい列のヘッダーを追加 -->
                     </tr>
