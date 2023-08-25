@@ -27,7 +27,6 @@ class HomeController extends Controller
     {
         $categories = Category::all();
 
-    
         $order = ['Gender', 'Length', 'Color', 'Background wall', 'Angle', 'Age'];
     
         $sortedStyles = Style::all()->sortBy(function ($style) use ($order) {
@@ -73,13 +72,14 @@ class HomeController extends Controller
         $sortOption = $request->input('sort', 'downloads');  // デフォルトはダウンロード数の多い順
     
         $query = Image::with('categories');
-    
+
         if ($sortOption === 'newest') {
             $query->orderBy('created_at', 'desc');
         } else {
-            $query->orderBy('download_count', 'desc');
-        }
-    
+            $query->orderBy('download_count', 'desc')
+                    ->orderByRaw('RAND()');
+        }    
+
         if ($categoryName) {
             $query->whereHas('categories', function ($subQuery) use ($categoryName) {
                 $subQuery->where('name', $categoryName);
