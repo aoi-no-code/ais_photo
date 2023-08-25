@@ -43,14 +43,16 @@ class AdminController extends Controller
                 $categories = Category::orderBy('style_id', 'asc')->get();  // 'asc'は昇順、'desc'は降順
                 $images = Image::with('categories')->orderBy('created_at', 'desc')->get();
                 return view('admin.image_form', compact('categories', 'images'));
+            
             case 'category':
-                $categories = Category::orderBy('style_id', 'asc')->get();  // 'asc'は昇順、'desc'は降順
+                $categories = Category::all();
                 $styles = Style::all();
-
                 return view('admin.category_form', compact('categories', 'styles'))->render();
+
             case 'style':
                 $styles = Style::all();
                 return view('admin.style', compact('styles'))->render();
+                
             default:
                 abort(404);
         }

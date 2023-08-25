@@ -47,6 +47,7 @@ Route::middleware(['auth', 'admin'])->group(function () {
 
     Route::put('/users/{userId}/update-ban-info', [App\Http\Controllers\UserController::class, 'updateBanInfo'])->name('user.updateBanInfo');
 
+    Route::get('/user/index', [App\Http\Controllers\UserController::class, 'index'])->name('user.index');
     
 });
 
