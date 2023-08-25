@@ -48,8 +48,10 @@ class HomeController extends Controller
     
         $query = $this->buildImageQuery($request, $categoryName);
         $images = $query->take($limit)->get();
+
+        $totalImagesCount = Image::count(); 
     
-        return view('user.top', compact('categories', 'images', 'styles', 'sortedStyles'));
+        return view('user.top', compact('categories', 'images', 'styles', 'sortedStyles', 'totalImagesCount'));
     }
     
     public function fetchImages(Request $request)

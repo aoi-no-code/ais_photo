@@ -5,6 +5,11 @@
 @section('content')
     <div class="main body-no-scroll">
 
+        <div class="totalCount" >
+            <p class="total-text">画像の枚数：{{ $totalImagesCount }}枚</p>
+        </div>
+
+
         <div class="filter-dropdown">
             <a href="#" class="filter-text" role="button" id="categoryDropdown">
                 フィルター

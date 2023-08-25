@@ -17,7 +17,25 @@
     color: #000000;
     text-decoration: none; 
     z-index: 1000;
+    
 }
+
+.totalCount {
+    margin: 100px auto 30px;
+    position: relative;
+}
+
+
+.total-text {
+    position: absolute;
+    left: 40px;
+    font: 10px/17px 'Hiragino Mincho ProN';
+    letter-spacing: 1px;
+    color: #000000;
+    text-decoration: none; 
+    z-index: 1000;
+}
+
 
 .filter-text:hover {
     text-decoration: underline;
