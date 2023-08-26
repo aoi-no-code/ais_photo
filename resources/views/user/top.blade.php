@@ -86,42 +86,7 @@ document.addEventListener('DOMContentLoaded', function() {
     function checkAndAddWrapper() {
         const container = document.querySelector('.image-container');
         const images = container.querySelectorAll('img');
-
     }
-
-
-
-
-
-    // document.getElementById('sortByDate').addEventListener('click', function() {
-    //     images.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
-    //     displayImages(images);
-    // });
-
-    // document.getElementById('sortByDownloads').addEventListener('click', function() {
-    //     images.sort((a, b) => b.downloads - a.downloads);
-    //     displayImages(images);
-    // });
-
-    // function displayImages(imageArray) {
-    // const container = document.getElementById('imageContainer');
-    // container.innerHTML = '';
-
-    // imageArray.forEach(image => {
-    //     const imgElem = document.createElement('img');
-    //     imgElem.src = image.url;
-    //     container.appendChild(imgElem);
-    // });
-    // }
-
-
-
-
-
-
-
-
-
 
     let isLoading = false;  // ロード中かどうかを示すフラグ
     let noMoreImages = false;  // これ以上ロードする画像がないかどうかを示すフラグ
