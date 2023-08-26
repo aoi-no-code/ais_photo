@@ -27,7 +27,7 @@
                         data-downloadcount="{{ $image->download_count }}"
                         data-createdat="{{ $image->created_at }}"
                         data-category="{{ $image->categories->pluck('name')->implode(',') }}">
-                    <a href="{{ route('image.download', $image->filename) }}">
+                    <a href="{{ route('increase.downloadCount', $image->filename) }}">
                         <img src="{{ Storage::disk('s3')->url('images/' . $image->filename) }}" alt="Image" class="image">
                     </a>
                     <span class="download-count">
