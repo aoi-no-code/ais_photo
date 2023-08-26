@@ -92,7 +92,10 @@ class ImageController extends Controller
         ]);
     }
 
-
-
-            
+    public function incrementDownloadCount($filename) {
+        $image = Image::where('filename', $filename)->firstOrFail();
+        $image->increment('download_count');
+        return response()->json(['message' => 'Download count incremented']);
+    }
+    
 }
