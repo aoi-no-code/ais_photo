@@ -80,10 +80,10 @@
 @endsection
 
 <script>
-const csrf_token_here = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-
 document.addEventListener('DOMContentLoaded', function() {
     const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+
+    const csrf_token_here = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
     // 画像要素にラッパーを追加するための関数（未使用）
     function checkAndAddWrapper() {
