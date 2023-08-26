@@ -80,6 +80,8 @@
 @endsection
 
 <script>
+const csrf_token_here = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
 document.addEventListener('DOMContentLoaded', function() {
     const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
 
