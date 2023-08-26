@@ -92,10 +92,22 @@ class ImageController extends Controller
         ]);
     }
 
-    public function incrementDownloadCount($filename) {
+    public function downloadCount($filename) {
         $image = Image::where('filename', $filename)->firstOrFail();
         $image->increment('download_count');
         return response()->json(['message' => 'Download count incremented']);
     }
+
+    public function incrementDownloadCount($filename) {
+        // イメージを検索
+        $image = Image::where('filename', $filename)->firstOrFail();
+        
+        // download_count インクリメント
+        $image->increment('download_count');
+        
+        // インクリメントが成功したことを示す何らかのレスポンスを返す
+        return response()->json(['status' => 'success']);
+    }
+    
     
 }

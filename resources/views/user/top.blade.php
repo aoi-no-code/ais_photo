@@ -27,7 +27,7 @@
                         data-downloadcount="{{ $image->download_count }}"
                         data-createdat="{{ $image->created_at }}"
                         data-category="{{ $image->categories->pluck('name')->implode(',') }}">
-                    <a href="{{ route('increase.downloadCount', $image->filename) }}">
+                    <a href="{{ route('increment-download-count', $image->filename) }}">
                         <img src="{{ Storage::disk('s3')->url('images/' . $image->filename) }}" alt="Image" class="image">
                     </a>
                     <span class="download-count">
@@ -36,7 +36,7 @@
                     </span>
                 </div>   
             @endforeach
-                    
+                            
             <div class="fullscreen-modal" id="fullscreenModal">
                 <img src="" id="fullscreenImage" style="display: none;">
             </div>
