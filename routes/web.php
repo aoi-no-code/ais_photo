@@ -72,4 +72,4 @@ Route::get('/image/{filename}', [App\Http\Controllers\ImageController::class, 'd
 Route::get('/load-more-images', [App\Http\Controllers\ImageController::class, 'loadMoreImages']);
 
 
-Route::post('/increment-download-count/{filename}', [App\Http\Controllers\ImageController::class, 'incrementDownloadCount']);
+Route::post('/increase-download-count/{filename}', [App\Http\Controllers\ImageController::class, 'incrementDownloadCount']);
