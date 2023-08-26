@@ -38,7 +38,6 @@
             @endforeach
                     
             <div class="fullscreen-modal" id="fullscreenModal">
-                <div class="spinner" id="loadingSpinner"></div>
                 <img src="" id="fullscreenImage" style="display: none;">
             </div>
 
@@ -237,7 +236,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
         const modal = document.getElementById('fullscreenModal');
         const fullscreenImage = document.getElementById('fullscreenImage');
-        const spinner = document.getElementById('loadingSpinner');
 
         // モーダルクリックでの閉じる処理をここで一度だけ設定
         modal.addEventListener('click', function() {
@@ -246,7 +244,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 document.body.classList.remove('body-no-scroll');
 
                 // スピナーと画像の表示状態をリセット
-                spinner.style.display = 'none';
                 fullscreenImage.style.display = 'none';
             }
         });
@@ -265,7 +262,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 modal.style.display = 'flex';
                 document.body.classList.add('body-no-scroll');
 
-                spinner.style.display = 'block';  // スピナーを表示
                 fullscreenImage.style.display = 'none';  // 画像は非表示に設定
 
                 // 画像情報を取得
@@ -280,13 +276,11 @@ document.addEventListener('DOMContentLoaded', function() {
 
                         // 画像が読み込まれたらスピナーを非表示にして、画像を表示
                         fullscreenImage.onload = function() {
-                            spinner.style.display = 'none';
                             fullscreenImage.style.display = 'block';
                             isDownloading = false;  // ダウンロードが終了したのでフラグを更新
                         }
 
                         // 初期のステートとしてスピナーを表示し、画像を非表示にします。
-                        spinner.style.display = 'block';
                         fullscreenImage.style.display = 'none';
 
                         fullscreenImage.src = img.src;
