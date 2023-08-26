@@ -83,6 +83,7 @@
 document.addEventListener('DOMContentLoaded', function() {
     const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
 
+    // 画像要素にラッパーを追加するための関数（未使用）
     function checkAndAddWrapper() {
         const container = document.querySelector('.image-container');
         const images = container.querySelectorAll('img');
@@ -91,6 +92,7 @@ document.addEventListener('DOMContentLoaded', function() {
     let isLoading = false;  // ロード中かどうかを示すフラグ
     let noMoreImages = false;  // これ以上ロードする画像がないかどうかを示すフラグ
 
+    // スクロール時に画像を追加ロードするイベントリスナー
     $(window).on('scroll', function() {
         if (!isLoading && !noMoreImages && $(window).scrollTop() + $(window).height() > $(document).height() - $("#footer").height()) {
             loadMoreImages();
@@ -101,6 +103,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const limit = 20;
     let selectedCategory = '';
 
+    // 画像を追加でロードする関数
     function loadMoreImages() {
         isLoading = true;
         $.ajax({
@@ -119,7 +122,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     data.images.forEach(image => {
                         const imageUrl = `{{ Storage::disk('s3')->url('images/') }}${image.filename}`;
                         const downloadLink = `{{ route('image.download', '') }}/${image.filename}`;
-
+                        
                         const imageElement = document.createElement('div');
                         imageElement.className = "image-wrapper";
                         imageElement.innerHTML = `
@@ -128,34 +131,30 @@ document.addEventListener('DOMContentLoaded', function() {
                             </a>
                         `;
 
-                        // モバイルの場合の処理
+                        // For mobile devices
                         if (isMobile) {
                             const imgElement = imageElement.querySelector('img');
                             imgElement.parentElement.addEventListener('click', function(e) {
                                 e.preventDefault();
-                                fetch(this.href, {
-                                    method: 'GET',
+                                // Increase the download_count by 1 (need server-side code to handle this)
+                                fetch(`/increase-download-count/${image.filename}`, {
+                                    method: 'POST',
                                     headers: {
                                         'X-Requested-With': 'XMLHttpRequest'
                                     }
-                                })
-                                .then(response => {
-                                    if(response.ok) {
-                                        const modal = document.getElementById('fullscreenModal');
-                                        const fullscreenImage = document.getElementById('fullscreenImage');
-                                        fullscreenImage.src = imgElement.src;
-                                        modal.style.display = 'flex';
+                                });
 
-                                        modal.addEventListener('click', function() {
-                                            this.style.display = 'none';
-                                        });
-                                    }
+                                const modal = document.getElementById('fullscreenModal');
+                                const fullscreenImage = document.getElementById('fullscreenImage');
+                                fullscreenImage.src = imgElement.src;
+                                modal.style.display = 'flex';
+
+                                modal.addEventListener('click', function() {
+                                    this.style.display = 'none';
                                 });
                             });
                         }
-                        console.log("loadMoreImages called");
 
-                        // ダウンロード数の表示のための要素を作成
                         const downloadCountSpan = document.createElement('span');
                         downloadCountSpan.className = "download-count";
 
@@ -167,19 +166,18 @@ document.addEventListener('DOMContentLoaded', function() {
                         downloadCountSpan.appendChild(downloadCountText);
                         imageElement.appendChild(downloadCountSpan);
                         
-                        // 画像をコンテナに追加
                         $('.image-container').append(imageElement);
                     });
                     
                     offset += data.images.length;
                 } else {
                     $("#endMessage").show();
-                    noMoreImages = true;  // これ以上ロードする画像がない場合はフラグをtrueに設定 
+                    noMoreImages = true;
                 }
             },
             complete: function() {
                 $("#loadingIndicator").hide();
-                isLoading = false;  // ロード完了時にフラグをfalseに変更
+                isLoading = false;
             }
         });
     }
