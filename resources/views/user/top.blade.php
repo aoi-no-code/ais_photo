@@ -140,7 +140,8 @@ document.addEventListener('DOMContentLoaded', function() {
                                 fetch(`/increase-download-count/${image.filename}`, {
                                     method: 'POST',
                                     headers: {
-                                        'X-Requested-With': 'XMLHttpRequest'
+                                        'X-Requested-With': 'XMLHttpRequest',
+                                        'X-CSRF-TOKEN': csrf_token_here // CSRFトークンをここにセット
                                     }
                                 });
 
