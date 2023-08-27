@@ -27,7 +27,7 @@
                         data-downloadcount="{{ $image->download_count }}"
                         data-createdat="{{ $image->created_at }}"
                         data-category="{{ $image->categories->pluck('name')->implode(',') }}">
-                    <a href="{{ route('increment-download-count', $image->filename) }}">
+                    <a href="{{ route('image.download', $image->filename) }}">
                         <img src="{{ Storage::disk('s3')->url('images/' . $image->filename) }}" alt="Image" class="image">
                     </a>
                     <span class="download-count">
@@ -36,7 +36,7 @@
                     </span>
                 </div>   
             @endforeach
-                            
+                    
             <div class="fullscreen-modal" id="fullscreenModal">
                 <img src="" id="fullscreenImage" style="display: none;">
             </div>
@@ -82,9 +82,6 @@
 document.addEventListener('DOMContentLoaded', function() {
     const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
 
-    const csrf_token_here = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-
-    // 画像要素にラッパーを追加するための関数（未使用）
     function checkAndAddWrapper() {
         const container = document.querySelector('.image-container');
         const images = container.querySelectorAll('img');
@@ -93,18 +90,49 @@ document.addEventListener('DOMContentLoaded', function() {
     let isLoading = false;  // ロード中かどうかを示すフラグ
     let noMoreImages = false;  // これ以上ロードする画像がないかどうかを示すフラグ
 
-    // スクロール時に画像を追加ロードするイベントリスナー
     $(window).on('scroll', function() {
         if (!isLoading && !noMoreImages && $(window).scrollTop() + $(window).height() > $(document).height() - $("#footer").height()) {
             loadMoreImages();
         }
     });
 
+    function attachModalForImage(imgElement) {
+        imgElement.parentElement.addEventListener('click', function(e) {
+            e.preventDefault();
+
+            // モーダルを表示
+            const modal = document.getElementById('fullscreenModal');
+            const fullscreenImage = document.getElementById('fullscreenImage');
+            fullscreenImage.src = imgElement.src;
+            modal.style.display = 'flex';
+            fullscreenImage.style.display = 'flex';
+
+            // filenameを取得
+            const url = imgElement.src;
+            const filename = url.split('/').pop();
+
+            if(filename) {
+                // ダウンロードカウントをインクリメントするAjaxリクエスト
+                $.ajax({
+                    url: `/increment-download-count/${filename}`,
+                    type: 'GET',
+                    success: function(data) {
+                        // インクリメント成功後の処理（必要であれば）
+                    },
+                    error: function() {
+                        // インクリメント失敗後の処理（必要であれば）
+                    }
+                });
+            } else {
+                console.log("Filename could not be extracted.");
+            }
+        });
+    }
+
     let offset = 20;
     const limit = 20;
     let selectedCategory = '';
 
-    // 画像を追加でロードする関数
     function loadMoreImages() {
         isLoading = true;
         $.ajax({
@@ -115,15 +143,12 @@ document.addEventListener('DOMContentLoaded', function() {
                 limit: limit,
                 categoryName: selectedCategory
             },
-            beforeSend: function() {
-                $("#loadingIndicator").show();
-            },
             success: function(data) {
                 if (data.images && data.images.length > 0) {
                     data.images.forEach(image => {
                         const imageUrl = `{{ Storage::disk('s3')->url('images/') }}${image.filename}`;
                         const downloadLink = `{{ route('image.download', '') }}/${image.filename}`;
-                        
+
                         const imageElement = document.createElement('div');
                         imageElement.className = "image-wrapper";
                         imageElement.innerHTML = `
@@ -132,31 +157,13 @@ document.addEventListener('DOMContentLoaded', function() {
                             </a>
                         `;
 
-                        // For mobile devices
+                        // loadMoreImages内の関連部分
                         if (isMobile) {
                             const imgElement = imageElement.querySelector('img');
-                            imgElement.parentElement.addEventListener('click', function(e) {
-                                e.preventDefault();
-                                // Increase the download_count by 1 (need server-side code to handle this)
-                                fetch(`/increase-download-count/${image.filename}`, {
-                                    method: 'POST',
-                                    headers: {
-                                        'X-Requested-With': 'XMLHttpRequest',
-                                        'X-CSRF-TOKEN': csrf_token_here // CSRFトークンをここにセット
-                                    }
-                                });
-
-                                const modal = document.getElementById('fullscreenModal');
-                                const fullscreenImage = document.getElementById('fullscreenImage');
-                                fullscreenImage.src = imgElement.src;
-                                modal.style.display = 'flex';
-
-                                modal.addEventListener('click', function() {
-                                    this.style.display = 'none';
-                                });
-                            });
+                            attachModalForImage(imgElement);
                         }
-
+                        
+                        // ダウンロード数の表示のための要素を作成
                         const downloadCountSpan = document.createElement('span');
                         downloadCountSpan.className = "download-count";
 
@@ -168,6 +175,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         downloadCountSpan.appendChild(downloadCountText);
                         imageElement.appendChild(downloadCountSpan);
                         
+                        // 画像をコンテナに追加
                         $('.image-container').append(imageElement);
                     });
                     
@@ -178,9 +186,26 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
             },
             complete: function() {
-                $("#loadingIndicator").hide();
                 isLoading = false;
             }
+        });
+    }
+
+    // 独立したモバイルデバイス用のコード
+    if (isMobile) {
+        const images = document.querySelectorAll('.image');
+        const modal = document.getElementById('fullscreenModal');
+        const fullscreenImage = document.getElementById('fullscreenImage');
+
+        // モーダルを閉じるためのイベントリスナー
+        modal.addEventListener('click', function() {
+            this.style.display = 'none';
+            document.body.classList.remove('body-no-scroll');
+            fullscreenImage.style.display = 'none';
+        });
+
+        images.forEach(img => {
+            attachModalForImage(img);
         });
     }
 
@@ -230,65 +255,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
 
-    // モバイルデバイスで画像をクリックした時のモーダル表示処理
-    if (isMobile) {
-        let isDownloading = false;  // 画像のダウンロード中かどうかを追跡
 
-        const modal = document.getElementById('fullscreenModal');
-        const fullscreenImage = document.getElementById('fullscreenImage');
-
-        // モーダルクリックでの閉じる処理をここで一度だけ設定
-        modal.addEventListener('click', function() {
-            if (!isDownloading) {
-                this.style.display = 'none';
-                document.body.classList.remove('body-no-scroll');
-
-                // スピナーと画像の表示状態をリセット
-                fullscreenImage.style.display = 'none';
-            }
-        });
-
-        images.forEach(img => {
-            img.parentElement.addEventListener('click', function(e) {
-                e.preventDefault();
-
-                // 既にダウンロード中なら何もしない
-                if (isDownloading) {
-                    return;
-                }
-
-                isDownloading = true;
-
-                modal.style.display = 'flex';
-                document.body.classList.add('body-no-scroll');
-
-                fullscreenImage.style.display = 'none';  // 画像は非表示に設定
-
-                // 画像情報を取得
-                fetch(this.href, {
-                    method: 'GET',
-                    headers: {
-                        'X-Requested-With': 'XMLHttpRequest'
-                    }
-                })
-                .then(response => {
-                    if(response.ok) {
-
-                        // 画像が読み込まれたらスピナーを非表示にして、画像を表示
-                        fullscreenImage.onload = function() {
-                            fullscreenImage.style.display = 'block';
-                            isDownloading = false;  // ダウンロードが終了したのでフラグを更新
-                        }
-
-                        // 初期のステートとしてスピナーを表示し、画像を非表示にします。
-                        fullscreenImage.style.display = 'none';
-
-                        fullscreenImage.src = img.src;
-                    }
-                });
-            });
-        });
-    }
 
     // filterTextの要素を取得します
     const filterText = document.querySelector('.filter-text');
