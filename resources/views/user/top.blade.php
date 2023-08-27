@@ -129,6 +129,25 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
+    // 独立したモバイルデバイス用のコード
+    if (isMobile) {
+        const images = document.querySelectorAll('.image');
+        const modal = document.getElementById('fullscreenModal');
+        const fullscreenImage = document.getElementById('fullscreenImage');
+
+        // モーダルを閉じるためのイベントリスナー
+        modal.addEventListener('click', function() {
+            this.style.display = 'none';
+            document.body.classList.remove('body-no-scroll');
+            fullscreenImage.style.display = 'none';
+        });
+
+        images.forEach(img => {
+            attachModalForImage(img);
+        });
+    }
+
+
     let offset = 20;
     const limit = 20;
     let selectedCategory = '';
@@ -191,23 +210,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // 独立したモバイルデバイス用のコード
-    if (isMobile) {
-        const images = document.querySelectorAll('.image');
-        const modal = document.getElementById('fullscreenModal');
-        const fullscreenImage = document.getElementById('fullscreenImage');
-
-        // モーダルを閉じるためのイベントリスナー
-        modal.addEventListener('click', function() {
-            this.style.display = 'none';
-            document.body.classList.remove('body-no-scroll');
-            fullscreenImage.style.display = 'none';
-        });
-
-        images.forEach(img => {
-            attachModalForImage(img);
-        });
-    }
 
     
     // 画像要素を取得
@@ -305,6 +307,9 @@ document.addEventListener('DOMContentLoaded', function() {
             document.querySelectorAll('.category-item.selected').forEach(selectedItem => {
                 selectedCategories.push(selectedItem.textContent.trim());
             });
+
+            // selectedCategory変数を更新
+            selectedCategory = selectedCategories.join(',');
 
             filterImages(selectedCategories);
         });

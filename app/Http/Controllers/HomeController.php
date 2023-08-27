@@ -83,11 +83,12 @@ class HomeController extends Controller
         }    
 
         if ($categoryName) {
-            $query->whereHas('categories', function ($subQuery) use ($categoryName) {
-                $subQuery->where('name', $categoryName);
+            $categories = explode(',', $categoryName); // カンマで区切って配列にする
+            $query->whereHas('categories', function ($subQuery) use ($categories) {
+                $subQuery->whereIn('name', $categories);
             });
         }
-    
+            
         return $query;
     }
     
@@ -96,12 +97,6 @@ class HomeController extends Controller
     {
         return view('user.contact');
     }
-
-
-    // public function terms()
-    // {
-    //     return view('user.terms');
-    // }
 
     public function submitContact(Request $request) {
         $data = $request->validate([
