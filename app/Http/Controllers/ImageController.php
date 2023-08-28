@@ -74,7 +74,7 @@ class ImageController extends Controller
         return response()->json(['message' => '画像が正常に削除されました。']);
     }
 
-        public function loadMoreImages(Request $request){
+    public function loadMoreImages(Request $request){
         $limit = $request->get('limit', 20);
         $offset = $request->get('offset', 0);
 

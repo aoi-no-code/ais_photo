@@ -72,8 +72,11 @@
     justify-content: center;
 }
 
-.image-wrapper {
+.image-sub-container {
     margin: 5px 15px;
+}
+
+.image-wrapper {
     position: relative;
     opacity: 0; 
     transform: translateY(30px);
