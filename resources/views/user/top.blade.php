@@ -85,6 +85,24 @@ document.addEventListener('DOMContentLoaded', function() {
     const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
     const baseUrl = "{{ Storage::disk('s3')->url('images/') }}";
 
+    // 独立したモバイルデバイス用のコード
+    if (isMobile) {
+        let images = document.querySelectorAll('.image');
+        const modal = document.getElementById('fullscreenModal');
+        const fullscreenImage = document.getElementById('fullscreenImage');
+
+        // モーダルを閉じるためのイベントリスナー
+        modal.addEventListener('click', function() {
+            this.style.display = 'none';
+            document.body.classList.remove('body-no-scroll');
+            fullscreenImage.style.display = 'none';
+        });
+
+        images.forEach(img => {
+            attachModalForImage(img);
+        });
+    }
+
     function attachModalForImage(imgElement) {
         imgElement.parentElement.addEventListener('click', function(e) {
             e.preventDefault();
@@ -117,33 +135,6 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     }
-
-    // 独立したモバイルデバイス用のコード
-    if (isMobile) {
-        let images = document.querySelectorAll('.image');
-        const modal = document.getElementById('fullscreenModal');
-        const fullscreenImage = document.getElementById('fullscreenImage');
-
-        // モーダルを閉じるためのイベントリスナー
-        modal.addEventListener('click', function() {
-            this.style.display = 'none';
-            document.body.classList.remove('body-no-scroll');
-            fullscreenImage.style.display = 'none';
-        });
-
-        images.forEach(img => {
-            attachModalForImage(img);
-        });
-    }
-
-
-
-
-
-
-
-
-
 
 
     // fotterが表示されたら読み込むようにしている
@@ -240,6 +231,10 @@ document.addEventListener('DOMContentLoaded', function() {
             
             // メインのコンテナに追加
             imageContainer.appendChild(newImageSubContainer);
+
+            if (isMobile) {
+                attachModalForImage(imgElement);
+            }
         });
     }
 
