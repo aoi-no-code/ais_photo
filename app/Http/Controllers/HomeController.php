@@ -7,7 +7,6 @@ use App\Models\Category;
 use App\Models\Image;
 use App\Models\Style;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\Log;
 
 
 use Illuminate\Support\Facades\Mail;
@@ -59,7 +58,6 @@ class HomeController extends Controller
     public function fetchImages(Request $request)
     {
         $categoryName = $request->input('categoryName');
-        Log::info('Category Name: ' . $categoryName);
         $offset = $request->input('offset', 0);  // デフォルトは0です
     
         $query = $this->buildImageQuery();
@@ -90,9 +88,10 @@ class HomeController extends Controller
         $query = Image::with('categories');
         // ダウンロード数の多い順に並べ替え
         $query->orderBy('download_count', 'desc');
+        // ダウンロード数が同じ場合にはランダムに（今後大量にデータが大量になったら注意かも）
+        $query->orderByRaw('RAND()');
         return $query;
-    }
-        
+    }        
 
     public function contact()
     {
