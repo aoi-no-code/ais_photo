@@ -147,7 +147,52 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
+        // 画像要素を取得
+        const images = document.querySelectorAll('.image-container .image');
 
+    // カテゴリに基づいて画像をフィルタリングする関数
+    function filterImages(selectedCategories) {
+        const images = document.querySelectorAll('.image-wrapper');
+        let matchFound = false; // マッチする画像が見つかったかどうかのフラグ
+
+        const notificationContainer = document.querySelector('.notification-container');
+        const noMatchMessage = document.getElementById('noMatchMessage');
+
+        // カテゴリが選択されていない場合の処理
+        if (selectedCategories.length === 0) {
+            images.forEach(img => {
+                img.style.display = 'block'; // すべての画像を表示
+            });
+            noMatchMessage.style.display = 'none';
+            notificationContainer.style.display = 'block'; // 再度表示する
+            return;
+        }
+
+        // カテゴリにマッチする画像を表示する処理
+        images.forEach(img => {
+            const dataCategory = img.getAttribute('data-category');
+            const imgCategories = dataCategory ? dataCategory.split(',') : [];
+
+            if (selectedCategories.every(cat => imgCategories.includes(cat))) {
+                img.style.display = 'block';
+                matchFound = true;
+            } else {
+                img.style.display = 'none';
+            }
+        });
+
+        // マッチする画像が一つもない場合の処理
+        if (!matchFound) {
+            noMatchMessage.style.display = 'block';
+            notificationContainer.style.display = 'none'; // ここで再度表示する必要があるか確認してください。
+        } else {
+            noMatchMessage.style.display = 'none';
+            notificationContainer.style.display = 'block'; // 他の条件下で再表示するためのロジック
+        }
+    }
+
+
+    // 画像追加で読み込む
     let offset = 20;
     const limit = 20;
     let selectedCategory = '';
@@ -212,49 +257,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
     
-    // 画像要素を取得
-    const images = document.querySelectorAll('.image-container .image');
 
-    // カテゴリに基づいて画像をフィルタリングする関数
-    function filterImages(selectedCategories) {
-        const images = document.querySelectorAll('.image-wrapper');
-        let matchFound = false; // マッチする画像が見つかったかどうかのフラグ
-
-        const notificationContainer = document.querySelector('.notification-container');
-        const noMatchMessage = document.getElementById('noMatchMessage');
-
-        // カテゴリが選択されていない場合の処理
-        if (selectedCategories.length === 0) {
-            images.forEach(img => {
-                img.style.display = 'block'; // すべての画像を表示
-            });
-            noMatchMessage.style.display = 'none';
-            notificationContainer.style.display = 'block'; // 再度表示する
-            return;
-        }
-
-        // カテゴリにマッチする画像を表示する処理
-        images.forEach(img => {
-            const dataCategory = img.getAttribute('data-category');
-            const imgCategories = dataCategory ? dataCategory.split(',') : [];
-
-            if (selectedCategories.every(cat => imgCategories.includes(cat))) {
-                img.style.display = 'block';
-                matchFound = true;
-            } else {
-                img.style.display = 'none';
-            }
-        });
-
-        // マッチする画像が一つもない場合の処理
-        if (!matchFound) {
-            noMatchMessage.style.display = 'block';
-            notificationContainer.style.display = 'none'; // ここで再度表示する必要があるか確認してください。
-        } else {
-            noMatchMessage.style.display = 'none';
-            notificationContainer.style.display = 'block'; // 他の条件下で再表示するためのロジック
-        }
-    }
     
 
 
