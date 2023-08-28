@@ -69,12 +69,12 @@
             <button id="closeFilterModal">exit</button>
         </div>
         
-        <div class="notification-container">
+        {{-- <div class="notification-container">
             <div id="loadingIndicator" class="notification-message" style="display: none;">Loading...</div>
             <div id="endMessage" class="notification-message" style="display: none;">
                 只今順次作成中です<br>少々お待ちください
             </div>
-        </div>
+        </div> --}}
     </div>
 
 
@@ -284,155 +284,6 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     }
-
-
-
-    // // 画像要素を取得
-    // const images = document.querySelectorAll('.image-container .image');
-
-    // // カテゴリに基づいて画像をフィルタリングする関数
-    // function filterImages(selectedCategories) {
-    //     const images = document.querySelectorAll('.image-wrapper');
-
-    //     let matchFound = false; // マッチする画像が見つかったかどうかのフラグ
-    //     const notificationContainer = document.querySelector('.notification-container');
-    //     const noMatchMessage = document.getElementById('noMatchMessage');
-
-    //     // カテゴリが選択されていない場合の処理
-    //     if (selectedCategories.length === 0) {
-    //         images.forEach(img => {
-    //             img.style.display = 'block'; // すべての画像を表示
-    //         });
-    //         noMatchMessage.style.display = 'none';
-    //         notificationContainer.style.display = 'block'; // 再度表示する
-    //         return;
-    //     }
-
-    //     // カテゴリにマッチする画像を表示する処理
-    //     images.forEach(img => {
-    //         const dataCategory = img.getAttribute('data-category');
-    //         const imgCategories = dataCategory ? dataCategory.split(',') : [];
-
-    //         if (selectedCategories.every(cat => imgCategories.includes(cat))) {
-    //             img.style.display = 'block';
-    //             matchFound = true;
-    //         } else {
-    //             img.style.display = 'none';
-    //         }
-    //     });
-
-    //     // マッチする画像が一つもない場合の処理
-    //     if (!matchFound) {
-    //         noMatchMessage.style.display = 'block';
-    //         notificationContainer.style.display = 'none'; // ここで再度表示する必要があるか確認してください。
-    //     } else {
-    //         noMatchMessage.style.display = 'none';
-    //         notificationContainer.style.display = 'block'; // 他の条件下で再表示するためのロジック
-    //     }
-    // }
-
-    // 画像追加で読み込む
-
-    // function loadMoreImages() {
-    //     isLoading = true;
-    //     $.ajax({
-    //         url: `/fetch-images`,
-    //         type: 'GET',
-    //         data: {
-    //             offset: offset,
-    //             limit: limit,
-    //             categoryName: selectedCategory,
-    //         },
-    //         success: function(data) {
-    //             if (data.images && data.images.length > 0) {
-    //                 data.images.forEach(image => {
-    //                     const imageUrl = `{{ Storage::disk('s3')->url('images/') }}${image.filename}`;
-    //                     const downloadLink = `{{ route('image.download', '') }}/${image.filename}`;
-
-    //                     const imageElement = document.createElement('div');
-    //                     imageElement.className = "image-wrapper";
-    //                     imageElement.innerHTML = `
-    //                         <a href="${downloadLink}">
-    //                             <img src="${imageUrl}" alt="Image" class="image">
-    //                         </a>
-    //                     `;
-
-    //                     // loadMoreImages内の関連部分
-    //                     if (isMobile) {
-    //                         const imgElement = imageElement.querySelector('img');
-    //                         attachModalForImage(imgElement);
-    //                     }
-                        
-    //                     // ダウンロード数の表示のための要素を作成
-    //                     const downloadCountSpan = document.createElement('span');
-    //                     downloadCountSpan.className = "download-count";
-
-    //                     const downloadIcon = document.createElement('i');
-    //                     downloadIcon.className = "bi bi-download";
-    //                     const downloadCountText = document.createTextNode(` ${image.download_count}`);
-                        
-    //                     downloadCountSpan.appendChild(downloadIcon);
-    //                     downloadCountSpan.appendChild(downloadCountText);
-    //                     imageElement.appendChild(downloadCountSpan);
-                        
-    //                     // 画像をコンテナに追加
-    //                     $('.image-container').append(imageElement);
-    //                 });
-                    
-    //                 offset += data.images.length;
-    //             } else {
-    //                 $("#endMessage").show();
-    //                 noMoreImages = true;
-    //             }
-    //         },
-    //         complete: function() {
-    //             isLoading = false;
-    //         }
-    //     });
-    // }
-
-    // // イベントハンドラを設定
-    // categoryCheckboxes.forEach(checkbox => {
-    //     checkbox.addEventListener('change', function() {
-    //         if (this.checked) {
-    //             selectedCategories.push(this.value);
-    //         } else {
-    //             const index = selectedCategories.indexOf(this.value);
-    //             if (index > -1) {
-    //                 selectedCategories.splice(index, 1);
-    //             }
-    //         }
-
-    //         // Ajaxでサーバに送信
-    //         $.ajax({
-    //             url: '/fetch-images', // コントローラーのURL
-    //             method: 'GET',
-    //             data: {
-    //                 categories: selectedCategories.join(',') // 配列をカンマ区切りの文字列に
-    //             },
-    //             success: function(response) {
-    //                 // 画像の更新処理（こちらは前述の通り）
-    //             }
-    //         });
-    //     });
-    // });
-
-    
-
-    
-
-
-
-
-
-
-
-
-
-
-
-
-
 
     // 【フィルター】の文字の固定
     const filterText = document.querySelector('.filter-text');
