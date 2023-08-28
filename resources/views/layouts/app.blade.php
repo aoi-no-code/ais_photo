@@ -7,6 +7,13 @@
 
     <link rel="icon" href="{{ asset('favicon.icon') }}" type="image/x-icon"/>
 
+    <!-- Apple Touch Icon (At least 200x200px) -->
+    <link rel="apple-touch-icon" href="{{ asset('favicon.icon') }}">
+
+    <!-- More advanced Apple meta tags -->
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('favicon.icon') }}">
+
+
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
