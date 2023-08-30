@@ -6,11 +6,13 @@ use Illuminate\Http\Request;
 use App\Models\Category;
 use App\Models\Image;
 use Illuminate\Support\Facades\Storage;
+use Intervention\Image\ImageManagerStatic as InterventionImage;
 
 
 class ImageController extends Controller
 {
 
+    
     public function upload(Request $request)
     {
         // 複数画像のバリデーション
@@ -21,17 +23,25 @@ class ImageController extends Controller
         // 複数画像のアップロード処理
         if ($request->hasFile('images')) {
             foreach ($request->file('images') as $imageFile) {
+                // 画像をIntervention Imageで読み込む
+                $image = InterventionImage::make($imageFile->getRealPath());
+    
+                // 画像に何らかの処理を加える場合はここで行う
+                // ...
+    
+                // Intervention Imageオブジェクトからバイナリデータを取得
+                $imageStream = $image->stream()->detach();
+    
                 $hash = hash_file('sha256', $imageFile->getRealPath());
                 $filename = $hash . '.' . $imageFile->getClientOriginalExtension();
     
                 // 既に同じハッシュの画像が存在するかを確認
                 if (Image::where('filename', $filename)->exists()) {
-                    // エラーメッセージを返すか、このファイルをスキップして次の画像へ
                     return redirect()->route('admin.top')->with('error', '同じ内容の画像が既に存在します: ' . $imageFile->getClientOriginalName());
                 }
     
-                // 画像をS3にアップロード
-                Storage::disk('s3')->putFileAs('images', $imageFile, $filename, 'public');
+                // メタデータを削除した画像をS3にアップロード
+                Storage::disk('s3')->put('images/' . $filename, $imageStream, 'public');
     
                 // 画像をDBに保存
                 Image::create(['filename' => $filename]);
@@ -40,6 +50,7 @@ class ImageController extends Controller
     
         return redirect()->route('admin.top')->with('success', '画像がアップロードされました！');
     }
+    
     
     public function downloadImage($filename) {
         // イメージを検索
