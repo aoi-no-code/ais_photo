@@ -99,7 +99,7 @@
             });
             if (confirm('本当にこの画像を削除しますか？')) {
                 $.ajax({
-                    url: `/image/delete/${imageId}`,  // 適切なURLに変更する
+                    url: `/admin/image/delete/${imageId}`,  // 適切なURLに変更する
                     method: 'DELETE',
                     success: function() {
                         alert('画像が削除されました');

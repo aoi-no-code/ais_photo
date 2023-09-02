@@ -38,7 +38,8 @@ Route::middleware(['auth', 'admin'])->group(function () {
 
 
     Route::post('/upload', [App\Http\Controllers\ImageController::class, 'upload'])->name('upload.image');
-    Route::delete('/image/delete/{image}', [App\Http\Controllers\ImageController::class, 'destroyAPI'])->name('api.images.destroy');
+
+    Route::delete('/image/delete/{imageId}', [App\Http\Controllers\ImageController::class, 'destroyAPI'])->name('api.images.destroy');
 
     Route::post('/user/store', [App\Http\Controllers\UserController::class, 'store'])->name('user.store');
     Route::put('/user/edit/{userId}', [App\Http\Controllers\UserController::class, 'edit'])->name('user.edit');
