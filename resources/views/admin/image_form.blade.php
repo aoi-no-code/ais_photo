@@ -61,7 +61,7 @@
                             @endforeach
                             <td>
                                 
-                                <button onclick="deleteImage({{ $image->id }})">削除</button>
+                                <button onclick="deleteImage('{{ $image->filename }}')">削除</button>
 
                             </td>
                         </tr>

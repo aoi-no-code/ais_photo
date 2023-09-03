@@ -91,15 +91,16 @@
             }
         }
     
-        function deleteImage(imageId) {
+        function deleteImage(filename) {
             $.ajaxSetup({
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 }
             });
+
             if (confirm('本当にこの画像を削除しますか？')) {
                 $.ajax({
-                    url: `/admin/image/delete/${imageId}`,  // 適切なURLに変更する
+                    url: `/image/delete/${filename}`,  // URLを適切に設定する
                     method: 'DELETE',
                     success: function() {
                         alert('画像が削除されました');

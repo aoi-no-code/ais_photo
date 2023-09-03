@@ -74,17 +74,25 @@ class ImageController extends Controller
         return redirect()->route('admin.top')->with('success', '画像が正常に削除されました。');
     }
     
-    public function destroyAPI(Image $image)
+    public function destroyAPI($filename)
     {
-        // S3からの画像ファイルの削除
-        Storage::disk('s3')->delete('images/' . $image->filename);
-        
-        // データベースからの画像の削除
-        $image->delete();
-        
-        return response()->json(['message' => '画像が正常に削除されました。']);
-    }
+        // S3から画像を削除
+        if(Storage::disk('s3')->exists('images/' . $filename)) {
+            Storage::disk('s3')->delete('images/' . $filename);
+        } else {
+            return response()->json(['error' => 'File not found in S3'], 404);
+        }
 
+        // データベースから画像情報を削除
+        $image = Image::where('filename', $filename)->first();
+        if ($image) {
+            $image->delete();
+            return response()->json(['success' => 'File successfully deleted'], 200);
+        } else {
+            return response()->json(['error' => 'File not found in database'], 404);
+        }
+    }
+    
     public function loadMoreImages(Request $request){
         $limit = $request->get('limit', 20);
         $offset = $request->get('offset', 0);
