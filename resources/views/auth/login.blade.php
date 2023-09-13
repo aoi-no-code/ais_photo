@@ -42,5 +42,9 @@
             </div>
 
         </form>
+
+        <footer>
+            <a href="{{ route('rules') }}" class="footer-link">特定商取引法に基づく表記</a>
+        </footer>
     </div>
 @endsection

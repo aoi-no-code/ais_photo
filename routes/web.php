@@ -16,6 +16,8 @@ Route::get('/', function () {
     return view('auth.login', compact('images'));
 });
 
+Route::get('/rules', [App\Http\Controllers\Auth\LoginController::class, 'showRules'])->name('rules');
+
 Route::get('/logout', [App\Http\Controllers\Auth\LoginController::class, 'logout'])->name('logout');
 
 Route::middleware(['auth', 'admin'])->group(function () {

@@ -33,6 +33,14 @@ class LoginController extends Controller
         
         return view('auth.login', compact('images'));
     }
+
+    public function showRules()
+    {
+        return view('auth.rules');
+    }
+
+
+
     
 
 }
