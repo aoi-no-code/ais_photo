@@ -103,13 +103,22 @@ class ImageController extends Controller
     
     public function destroyAPI($filename)
     {
-        // S3から画像を削除
+        // S3から画像が存在する場合は削除
         if(Storage::disk('s3')->exists('images/' . $filename)) {
             Storage::disk('s3')->delete('images/' . $filename);
-        } else {
-            return response()->json(['error' => 'File not found in S3'], 404);
         }
-
+        
+        // DBから関連するデータを削除（こちらのロジックはあなたのDB設計に依存します）
+        $image = Image::where('filename', $filename)->first();  // 例として、filenameをキーにしてDBを検索
+        if ($image) {
+            $image->delete();
+        } else {
+            return response()->json(['error' => 'File not found in DB'], 404);
+        }
+    
+        return response()->json(['success' => 'File successfully deleted'], 200);
+    }
+    
         // データベースから画像情報を削除
         $image = Image::where('filename', $filename)->first();
         if ($image) {
