@@ -10,6 +10,13 @@ use App\Models\Category;
 
 class StyleController extends Controller
 {
+
+    public function index()
+    {
+        $styles = Style::all();
+        return view('admin.style', compact('styles'))->render();
+    }
+
     public function store(Request $request)
     {
         $validatedData = $request->validate([
@@ -17,13 +24,7 @@ class StyleController extends Controller
         ]);
 
         $style = Style::create($validatedData);
-        return redirect()->route('admin.top')->with('success', 'カテゴリーを追加しました！');
-    }
-
-    public function index()
-    {
-        $styles = Style::all();
-        return view('admin.style', compact('styles'))->render();
+        return redirect()->back()->with('success', 'カテゴリーを追加しました！');
     }
 
     // カテゴリーの変更

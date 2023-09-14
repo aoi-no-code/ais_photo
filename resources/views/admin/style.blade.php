@@ -1,3 +1,8 @@
+@extends('admin_layouts.app')
+
+@section('content')
+
+
 <div id="style" class="tab">
     <h2>カテゴリー整理</h2>
     <form action="{{ route('style.store') }}" method="post">
@@ -34,3 +39,6 @@
         @endforeach
     </ul>
 </div>
+
+@endsection
+

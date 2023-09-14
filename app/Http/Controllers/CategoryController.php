@@ -12,6 +12,14 @@ use App\Models\Style;
 class CategoryController extends Controller
 {
 
+    public function index()
+    {
+        $categories = Category::all();
+        $styles = Style::all();
+        return view('admin.category_form', compact('categories', 'styles'))->render();
+    
+    }
+
     // カテゴリーの追加
     public function store(Request $request)
     {
@@ -20,7 +28,7 @@ class CategoryController extends Controller
         ]);
 
         $category = Category::create($validatedData);
-        return redirect()->route('admin.top')->with('success', 'カテゴリーを追加しました！');
+        return redirect()->back()->with('success', 'カテゴリーを追加しました！');
     }
 
     // 画像のカテゴリー変更

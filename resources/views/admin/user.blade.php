@@ -1,3 +1,8 @@
+@extends('admin_layouts.app')
+
+@section('content')
+
+
 <div id="user" class="tab">
     <h2>ユーザー管理</h2>
     <div class="container" style="display: block">
@@ -84,3 +89,5 @@
         </div>
     </div>
 </div>
+@endsection
+

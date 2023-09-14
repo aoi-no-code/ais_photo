@@ -12,6 +12,33 @@ use Intervention\Image\ImageManagerStatic as InterventionImage;
 class ImageController extends Controller
 {
 
+
+    public function index(Request $request) {
+        $categories = Category::orderBy('style_id', 'asc')->get();
+        
+        $orderBy = $request->input('orderBy', 'created_at');  // デフォルトは 'created_at'
+        $orderDirection = $request->input('orderDirection', 'desc');  // デフォルトは 'desc'
+    
+        $query = Image::with('categories')->orderBy($orderBy, $orderDirection);
+                
+        // カテゴリーフィルターの取得
+        $categoryFilter = $request->input('category');
+        
+        // カテゴリーフィルターがあればクエリに適用
+        if (!empty($categoryFilter)) {
+            $query->whereHas('categories', function($q) use ($categoryFilter) {
+                $q->where('categories.id', $categoryFilter);
+            });
+        }
+        
+        $images = $query->paginate(50);
+        
+        return view('admin.image_form', compact('categories', 'images'));
+    }
+        
+
+
+
     
     public function upload(Request $request)
     {
@@ -48,7 +75,7 @@ class ImageController extends Controller
             }
         }
     
-        return redirect()->route('admin.top')->with('success', '画像がアップロードされました！');
+        return back()->with('success', '画像がアップロードされました！');
     }
     
     

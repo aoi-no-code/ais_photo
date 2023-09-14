@@ -9,10 +9,12 @@ use Carbon\Carbon;
 class UserController extends Controller
 {
 
+
     // ユーザ作成画面の表示
-    public function create()
+    public function index()
     {
-        return view('users.create');
+        $users = User::all();
+        return view('admin.user', compact('users'));
     }
 
     // ユーザの保存

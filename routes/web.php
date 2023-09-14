@@ -22,15 +22,15 @@ Route::get('/logout', [App\Http\Controllers\Auth\LoginController::class, 'logout
 
 Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('/admin', [App\Http\Controllers\AdminController::class, 'index'])->name('admin.top');
-    Route::get('/admin/get-content/{content}', [App\Http\Controllers\AdminController::class, 'getContent']);
+    // Route::get('/admin/get-content/{content}', [App\Http\Controllers\AdminController::class, 'getContent']);
 
 
-
+    Route::get('/category', [App\Http\Controllers\CategoryController::class, 'index'])->name('category');
     Route::post('/category/store', [App\Http\Controllers\CategoryController::class, 'store'])->name('categories.store');
     Route::delete('/category/destroy/{categoryId}', [App\Http\Controllers\CategoryController::class, 'destroy'])->name('categories.destroy');
     Route::put('/category/update/{categoryId}', [App\Http\Controllers\CategoryController::class, 'update'])->name('categories.update');
-
     Route::put('/admin/images/update-category', [App\Http\Controllers\CategoryController::class, 'updateAllCategories'])->name('images.updateAllCategories');
+
 
 
     Route::get('/style', [App\Http\Controllers\StyleController::class, 'index'])->name('style');
@@ -41,8 +41,14 @@ Route::middleware(['auth', 'admin'])->group(function () {
 
     Route::post('/upload', [App\Http\Controllers\ImageController::class, 'upload'])->name('upload.image');
 
+    Route::get('/image', [App\Http\Controllers\ImageController::class, 'index'])->name('image');
     Route::delete('/image/delete/{filename}', [App\Http\Controllers\ImageController::class, 'destroyAPI'])->name('api.images.destroy');
+    Route::get('/images/search', [App\Http\Controllers\ImageController::class, 'search'])->name('images.search');
 
+
+
+
+    Route::get('/user', [App\Http\Controllers\UserController::class, 'index'])->name('user');
     Route::post('/user/store', [App\Http\Controllers\UserController::class, 'store'])->name('user.store');
     Route::put('/user/edit/{userId}', [App\Http\Controllers\UserController::class, 'edit'])->name('user.edit');
 

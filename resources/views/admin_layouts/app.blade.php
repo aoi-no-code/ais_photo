@@ -32,26 +32,40 @@
             width: 200px;
             height: 100vh; /* Viewportの高さで固定する */
             overflow-y: auto; /* 必要に応じてスクロール */
+            background-color: rgb(240, 240, 240);
+            transition: width 0.2s ease-in-out; /* 新しい行 */
+            z-index: 9999;  /* 高いz-index値 */
         }
 
         .page-container {
-            margin-left: 210px; /* sidebar width + a little space */
+            margin-left: 50px; /* sidebar width + a little space */
             width: calc(100% - 210px); /* コンテンツの最大幅を制限する */
             overflow-y: auto; /* 必要に応じてスクロール */
         }
+
+        .sidebar-link {
+            color: black; /* 文字色を黒に設定 */
+        }
+
+        .admin-sidebar.closed {
+            width: 15px; /* 閉じた状態では幅を0に */
+            overflow: hidden;
+        }
+
+
+
     </style>
 </head>
 
 <body>
 
     <div class="container">
-        <div class="admin-sidebar">
+        <div class="admin-sidebar closed">
             <ul>
-
-                <li><a href="#" data-content="user" class="sidebar-link">ユーザー管理</a></li>
-                <li><a href="#" data-content="image" class="sidebar-link">画像管理</a></li>
-                <li><a href="#" data-content="category" class="sidebar-link">カテゴリー追加</a></li>
-                <li><a href="#" data-content="style" class="sidebar-link">カテ別けスタイル追加</a></li>
+                <li><a href="{{ route('user') }}"class="sidebar-link">ユーザー管理</a></li>
+                <li><a href="{{ route('image') }}" class="sidebar-link">画像管理</a></li>
+                <li><a href="{{ route('category') }}" class="sidebar-link">カテゴリー追加</a></li>
+                <li><a href="{{ route('style') }}" class="sidebar-link">カテ別けスタイル追加</a></li>
 
             </ul>
         </div>
@@ -65,8 +79,27 @@
         </div>
     </div>
 
-    <!-- jQuery and AJAX script -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+
+<script>
+
+document.addEventListener('DOMContentLoaded', function() {
+    const sidebar = document.querySelector('.admin-sidebar');
+
+    sidebar.addEventListener('mouseenter', function() {
+        sidebar.classList.remove('closed');
+    });
+
+    sidebar.addEventListener('mouseleave', function() {
+        sidebar.classList.add('closed');
+    });
+});
+
+</script>
+
+
+    {{-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
         function setEditButtonListener() {
             const editButton = document.getElementById('editButton');
@@ -112,36 +145,7 @@
                 });
             }
         }
-    
-        $(document).ready(function() {
-            $('.sidebar-link').on('click', function(e) {
-                e.preventDefault();
-                let content = $(this).data('content');
-    
-                $.ajax({
-                    url: `/admin/get-content/${content}`,
-                    method: 'GET',
-                    success: function(response) {
-                        $('.admin-content').html(response);
-                        // Ajaxリクエストが成功した後でsetEditButtonListener関数を呼び出し
-                        setEditButtonListener();
-                    },
-                    error: function() {
-                        alert('コンテンツの読み込みに失敗しました');
-                    }
-                });
-            });
-    
-            // 初回読み込み時にもsetEditButtonListenerを呼び出す
-            setEditButtonListener();
-        });
-
-        function showImage(src) {
-            document.getElementById('modalImage').src = src;
-            $('#imageModal').modal('show');
-        }
-
-    </script>
+    </script> --}}
             
     </body>
 

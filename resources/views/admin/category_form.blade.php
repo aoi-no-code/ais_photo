@@ -1,3 +1,10 @@
+@extends('admin_layouts.app')
+
+@section('content')
+
+
+
+
 <div id="category" class="tab">
     <h2>カテゴリー追加</h2>
     <form action="{{ route('categories.store') }}" method="post">
@@ -44,3 +51,4 @@
         @endforeach
     </ul>
 </div>
+@endsection
