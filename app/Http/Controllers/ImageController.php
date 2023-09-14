@@ -118,17 +118,7 @@ class ImageController extends Controller
     
         return response()->json(['success' => 'File successfully deleted'], 200);
     }
-    
-        // データベースから画像情報を削除
-        $image = Image::where('filename', $filename)->first();
-        if ($image) {
-            $image->delete();
-            return response()->json(['success' => 'File successfully deleted'], 200);
-        } else {
-            return response()->json(['error' => 'File not found in database'], 404);
-        }
-    }
-    
+        
     public function loadMoreImages(Request $request){
         $limit = $request->get('limit', 20);
         $offset = $request->get('offset', 0);
