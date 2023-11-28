@@ -20,17 +20,26 @@
             条件に一致する画像が見つかりませんでした。
         </div>
 
+        @php
+        $isSampleUser = Auth::check() && Auth::user()->name == 'sample';
+        @endphp
+
         <div class="image-container">
             @foreach($images as $image)
                 <div class="image-sub-container">
-                    <div class="image-wrapper" 
+                    <div class="image-wrapper {{ $isSampleUser ? 'no-pointer-events' : '' }}" 
                             data-filename="{{ $image->filename }}" 
                             data-downloadcount="{{ $image->download_count }}"
                             data-createdat="{{ $image->created_at }}"
                             data-category="{{ $image->categories->pluck('name')->implode(',') }}">
-                        <a href="{{ route('image.download', $image->filename) }}">
+                        {{-- $isSampleUserがtrueの場合、ダウンロードリンクを無効化 --}}
+                        @if(!$isSampleUser)
+                            <a href="{{ route('image.download', $image->filename) }}">
+                                <img src="{{ Storage::disk('s3')->url('images/' . $image->filename) }}" alt="Image" class="image">
+                            </a>
+                        @else
                             <img src="{{ Storage::disk('s3')->url('images/' . $image->filename) }}" alt="Image" class="image">
-                        </a>
+                        @endif
                         <span class="download-count">
                             <i class="bi bi-download"></i> 
                             {{ $image->download_count }}

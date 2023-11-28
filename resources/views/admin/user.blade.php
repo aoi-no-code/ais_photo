@@ -12,6 +12,8 @@
                     <th>ID</th>
                     <th>名前</th>
                     <th>メールアドレス</th>
+                    <th>削除</th>
+
                     {{-- <th>ステータス</th>
                     <th>ログイン制限</th>
                     <th>理由</th>
@@ -24,6 +26,14 @@
                     <td>{{ $user->id }}</td>
                     <td>{{ $user->name }}</td>
                     <td>{{ $user->email }}</td>
+                    <th>
+                        <form action="/user/delete/{{ $user->id }}" method="POST" onsubmit="return confirmDelete()">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit">削除</button>
+                        </form>
+                    </th>
+
                     {{-- <td>{{ $user->status }}</td>
                     <td>{{ $user->banned_until }}</td>
                     <td>{{ $user->ban_reason }}</td>
@@ -89,5 +99,11 @@
         </div>
     </div>
 </div>
+
+<script>
+    function confirmDelete() {
+        return confirm('このユーザーを削除しますか?');
+    }
+</script>
 @endsection
 
