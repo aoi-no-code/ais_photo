@@ -77,11 +77,11 @@
 
 
         <div class="container" style="display: block">
-            <h2>Add New User</h2>
-            <form action="{{ route('user.store') }}" method="post">
+            <h2>新しいユーザーを追加する</h2>
+            <form action="{{ route('user.store') }}" method="post" autocomplete="off">
                 @csrf
                 <div>
-                    <label for="name">Name:</label>
+                    <label for="name">名前:</label>
                     <input type="text" id="name" name="name" autocomplete="off" required>
                 </div>
                 <div>
@@ -89,11 +89,11 @@
                     <input type="email" id="Email" name="email" autocomplete="off" required>
                 </div>
                 <div>
-                    <label for="password">Password:</label>
+                    <label for="password">パスワード:</label>
                     <input type="password" id="password" name="password" autocomplete="off" required>
                 </div>
                 <div>
-                    <button type="submit">Add User</button>
+                    <button type="submit">追加する</button>
                 </div>
             </form>
         </div>
