@@ -25,8 +25,11 @@
     <div class="admin-content">
 
 
-        <a href="{{ url('/logout') }}">ログアウト</a>
-
+        <form action="{{ route('logout') }}" method="POST">
+            @csrf
+            <button type="submit">ログアウト</button>
+        </form>
+        
     </div>
 
 </div>

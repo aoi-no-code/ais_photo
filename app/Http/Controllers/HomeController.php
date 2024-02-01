@@ -7,12 +7,8 @@ use App\Models\Category;
 use App\Models\Image;
 use App\Models\Style;
 use Illuminate\Support\Facades\Storage;
-
-
 use Illuminate\Support\Facades\Mail;
 use App\Mail\ContactMail;
-
-
 
 class HomeController extends Controller
 {
@@ -45,23 +41,45 @@ class HomeController extends Controller
     
         $limit = 20;
     
-        $query = $this->buildImageQuery();
+        $query = $this->buildImageQuery($request->user());
         $images = $query->take($limit)->get();
 
         $totalImagesCount = Image::count(); 
-    
+        
         return view('user.top', compact('categories', 'images', 'styles', 'sortedStyles', 'totalImagesCount'));
     }
     
+    private function buildImageQuery($user)
+    {
+        $query = Image::query();
+    
+        // 画像を並べ替える基準を設定
+        $query->orderBy('download_count', 'desc');
+        $query->orderByRaw('RAND()');
+    
+        // personalプランのユーザーの場合、選択したカテゴリに属する画像のみを取得
+        if ($user->plan_type === 'personal') {
+            $stylePreferenceIds = $user->stylePreferences()->pluck('style_id');
+            $query->whereHas('categories', function ($subQuery) use ($stylePreferenceIds) {
+                $subQuery->whereIn('categories.id', $stylePreferenceIds);
+            });
+        }
+    
+        // corporateプランの場合は、特に制限を設けない（すべての画像を取得）
+    
+        return $query;
+    }
+
     public function fetchImages(Request $request)
     {
         $categoryName = $request->input('categoryName');
         $offset = $request->input('offset', 0);  // デフォルトは0です
     
-        $query = $this->buildImageQuery();
-    
+        $query = $this->buildImageQuery($request->user());
+        
         if ($categoryName) {
             $categories = explode(',', $categoryName); // カンマで区切って配列にする
+            
         
             $query->whereHas('categories', function ($subQuery) use ($categories) {
                 $subQuery->whereIn('name', $categories);
@@ -70,7 +88,6 @@ class HomeController extends Controller
             
         // 画像の総数を取得
         $totalImages = $query->count();
-    
         $images = $query->skip($offset)->take(20)->get();
     
         if ($images->isEmpty()) {
@@ -79,18 +96,7 @@ class HomeController extends Controller
     
         return response()->json(['images' => $images, 'totalImages' => $totalImages]);
     }
-        
-    
-    private function buildImageQuery()
-    {
-        $query = Image::with('categories');
-        // ダウンロード数の多い順に並べ替え
-        $query->orderBy('download_count', 'desc');
-        // ダウンロード数が同じ場合にはランダムに（今後大量にデータが大量になったら注意かも）
-        $query->orderByRaw('RAND()');
-        return $query;
-    }        
-
+                
     public function contact()
     {
         return view('user.contact');
@@ -112,8 +118,4 @@ class HomeController extends Controller
         return back()->with('message', '作成リクエストを送信しました！');
     }
 
-                        
 }
-
-
-

@@ -12,33 +12,39 @@ class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array<int, string>
-     */
     protected $fillable = [
         'name',
         'email',
         'password',
+        'plan_type',
     ];
 
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var array<int, string>
-     */
     protected $hidden = [
         'password',
         'remember_token',
     ];
 
-    /**
-     * The attributes that should be cast.
-     *
-     * @var array<string, string>
-     */
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    protected $guarded = [
+        'is_admin', // これにより、大量代入を通じてis_adminを設定することはできなくなります。
+    ];
+
+// User モデル内のメソッド
+public function stylePreferences()
+{
+    return $this->hasMany(UserStylePreference::class, 'user_id', 'id');
+}
+
+// このメソッドのテーブル名を修正
+public function categoryPreferences()
+{
+    // 'user_category_preferences' から 'user_style_preferences' に変更
+    return $this->belongsToMany(Category::class, 'user_style_preferences', 'user_id', 'category_id')
+                ->withPivot('style_id');
+}
+
+    
 }

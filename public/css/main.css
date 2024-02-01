@@ -226,7 +226,10 @@
     align-items: center; 
 }
 
-
+.disabled {
+    pointer-events: none; /* クリックイベントを無効にする */
+    opacity: 0.2; /* ボタンを半透明にする */
+}
 
 
 

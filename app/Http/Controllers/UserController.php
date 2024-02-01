@@ -3,18 +3,25 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\Style;
+use App\Models\Category;
+use App\Models\UserCategoryPreferences;
+
+
+
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 
 class UserController extends Controller
 {
 
-
-    // ユーザ作成画面の表示
     public function index()
     {
-        $users = User::all();
-        return view('admin.user', compact('users'));
+        $users = User::orderBy('is_admin', 'desc')->get();
+        $styles = Style::all();
+        $categories = Category::all();
+
+        return view('admin.user', compact('users', 'styles', 'categories'));
     }
 
     // ユーザの保存
@@ -71,5 +78,20 @@ class UserController extends Controller
     
         return redirect()->back()->with('message', 'Ban information updated successfully.');
     }
+
+    // UserController.php
+    public function updatePlan(Request $request, $userId)
+    {
+        $user = User::findOrFail($userId);
+        $data = $request->validate([
+            'plan_type' => 'required|in:personal,corporate',
+        ]);
+
+        $user->plan_type = $data['plan_type'];
+        $user->save();
+
+        return back()->with('message', 'User plan updated successfully.');
+    }
+
 
 }

@@ -10,36 +10,29 @@
         </div>
 
 
-        <div class="filter-dropdown">
-            <a href="#" class="filter-text" role="button" id="categoryDropdown">
-                フィルター
-            </a>
-        </div>
+    {{-- ユーザーのプランタイプに基づいてフィルターボタンのクリックを無効にする --}}
+    <div class="filter-dropdown {{ Auth::user()->plan_type === 'personal' ? 'disabled' : '' }}">
+        <a href="#" class="filter-text" role="button" id="categoryDropdown" 
+        onclick="return {{ Auth::user()->plan_type === 'corporate' ? 'true' : 'false' }};">
+            フィルター
+        </a>
+    </div>
     
         <div id="noMatchMessage" style="display: none;">
             条件に一致する画像が見つかりませんでした。
         </div>
 
-        @php
-        $isSampleUser = Auth::check() && Auth::user()->name == 'sample';
-        @endphp
-
         <div class="image-container">
             @foreach($images as $image)
                 <div class="image-sub-container">
-                    <div class="image-wrapper {{ $isSampleUser ? 'no-pointer-events' : '' }}" 
+                    <div class="image-wrapper" 
                             data-filename="{{ $image->filename }}" 
                             data-downloadcount="{{ $image->download_count }}"
                             data-createdat="{{ $image->created_at }}"
                             data-category="{{ $image->categories->pluck('name')->implode(',') }}">
-                        {{-- $isSampleUserがtrueの場合、ダウンロードリンクを無効化 --}}
-                        @if(!$isSampleUser)
-                            <a href="{{ route('image.download', $image->filename) }}">
-                                <img src="{{ Storage::disk('s3')->url('images/' . $image->filename) }}" alt="Image" class="image">
-                            </a>
-                        @else
+                        <a href="{{ route('image.download', $image->filename) }}">
                             <img src="{{ Storage::disk('s3')->url('images/' . $image->filename) }}" alt="Image" class="image">
-                        @endif
+                        </a>
                         <span class="download-count">
                             <i class="bi bi-download"></i> 
                             {{ $image->download_count }}

@@ -16,9 +16,14 @@ Route::get('/', function () {
     return view('auth.login', compact('images'));
 });
 
+Route::get('/logout', function () {
+    Auth::logout();
+    return redirect('/'); // ログアウト後のリダイレクト先
+});
+
 Route::get('/rules', [App\Http\Controllers\Auth\LoginController::class, 'showRules'])->name('rules');
 
-Route::get('/logout', [App\Http\Controllers\Auth\LoginController::class, 'logout'])->name('logout');
+Route::post('/logout', [App\Http\Controllers\Auth\LoginController::class, 'logout'])->name('logout');
 
 Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('/admin', [App\Http\Controllers\AdminController::class, 'index'])->name('admin.top');
@@ -51,13 +56,17 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('/user', [App\Http\Controllers\UserController::class, 'index'])->name('user');
     Route::post('/user/store', [App\Http\Controllers\UserController::class, 'store'])->name('user.store');
     Route::put('/user/edit/{userId}', [App\Http\Controllers\UserController::class, 'edit'])->name('user.edit');
+    Route::put('/user/update-plan/{userId}', [App\Http\Controllers\UserController::class, 'updatePlan'])->name('user.updatePlan');
+
 
     Route::delete('/user/delete/{userId}', [App\Http\Controllers\UserController::class, 'destroy'])->name('user.destroy');
 
     Route::put('/users/{userId}/update-ban-info', [App\Http\Controllers\UserController::class, 'updateBanInfo'])->name('user.updateBanInfo');
 
     Route::get('/user/index', [App\Http\Controllers\UserController::class, 'index'])->name('user.index');
-    
+
+    Route::post('/user/{userId}/preferences', [App\Http\Controllers\UserCategoryPreferencesController::class, 'update'])->name('user.preferences.update');
+
 });
 
 
@@ -71,16 +80,11 @@ Route::post('/submitContact', [App\Http\Controllers\HomeController::class, 'subm
 
 Route::get('/terms', [App\Http\Controllers\HomeController::class, 'terms'])->name('terms');
 
-
 Route::get('/fetch-images', [App\Http\Controllers\HomeController::class, 'fetchImages']);
-
-
 
 Route::get('/image/{filename}', [App\Http\Controllers\ImageController::class, 'downloadImage'])->name('image.download');
 
 Route::get('/load-more-images', [App\Http\Controllers\ImageController::class, 'loadMoreImages']);
-
-
 
 Route::get('/increment-download-count/{filename}', [App\Http\Controllers\ImageController::class, 'incrementDownloadCount'])->name('increment-download-count');
 
