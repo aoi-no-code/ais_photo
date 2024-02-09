@@ -59,9 +59,9 @@ class HomeController extends Controller
     
         // personalプランのユーザーの場合、選択したカテゴリに属する画像のみを取得
         if ($user->plan_type === 'personal') {
-            $stylePreferenceIds = $user->stylePreferences()->pluck('style_id');
-            $query->whereHas('categories', function ($subQuery) use ($stylePreferenceIds) {
-                $subQuery->whereIn('categories.id', $stylePreferenceIds);
+            $categoryPreferenceIds = $user->stylePreferences()->pluck('category_id');
+            $query->whereHas('categories', function ($subQuery) use ($categoryPreferenceIds) {
+                $subQuery->whereIn('categories.id', $categoryPreferenceIds);
             });
         }
     
